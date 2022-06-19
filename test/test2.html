@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="osql.js"></script>
+
+    <script>
+        osql.requireLogin();
+        //var num = document.getElementById('room')
+
+
+        let countupVal, updateVal;
+        let count = 0;
+        let countup = function () {
+            count = count + 1;
+            console.log(count)
+            var sql = `select situ from Test where room="1");`;
+            if (sql == "OK") {
+                execInsert();
+            }
+        }
+        countupVal = setInterval(countup, 1000);
+
+
+
+
+        async function execInsert() {
+
+
+            var sql = `insert into Test (room, situ) values("${room}", "OK");`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            window.location.href = 'test2.html';
+        }
+
+    </script>
+
+</head>
+
+<body>
+    roomは1
+</body>
+
+</html>

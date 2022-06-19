@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="osql.js"></script>
+
+    <script>
+        osql.requireLogin();
+
+        window.addEventListener('onload', test())
+
+        async function test() {
+            var sql2 = `creat table Test(room varchar(10), situ varchar(10))`
+            var objects2 = await osql.connect(sql2);
+        }
+
+        function button1Pressed() {
+            execInsert();
+        }
+
+        async function execInsert() {
+
+            var room = document.getElementById('tf3').value;
+
+
+            var sql = `insert into Test (room, situ) values("${room}", "OK");`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            document.getElementById('result').innerHTML = 'OK';
+
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>User登録</h1>
+    roomNumber:<input id="tf3" value="" type="textfield">
+    <button onclick="button1Pressed()">ボタン</button>
+    <br>
+    <p id="result"></p>
+</body>
+
+</html>
