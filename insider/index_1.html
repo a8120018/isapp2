@@ -9,8 +9,8 @@
         osql.requireLogin();
 
         async function buttonPressed() {
-            var userid = document.getElementById('tf1').value;
-            var password = document.getElementById('tf2').value;
+            var userid = document.getElementById('ID').value;
+            var password = document.getElementById('password').value;
 
             var sql = `select * from Users where id="${userid}";`;
             var objects = await osql.connect(sql);
@@ -26,7 +26,7 @@
             sessionStorage.setItem('userid', objects[0].id);
             sessionStorage.setItem('username', objects[0].name);
 
-            location.href = 'usertop.html';
+            location.href = 'index_3.html';
         }
     </script>
 </head>
@@ -36,6 +36,7 @@
     <p id="login">ログイン</p>
     <input type="text" id="ID" placeholder="ID">
     <input type="password" id="password" placeholder="Password">
+    <p id="result"></p>
     <a href="index_2.html">新規登録はこちら</a>
 </body>
 
