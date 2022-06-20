@@ -5,6 +5,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+    <script>
+        osql.requireLogin();
+        var room = sessionStorage.getItem('room');
+        document.getElementById('room').innerHTML = room;
+
+        var sql = `select * from Users left join (select * from Roles where id="${room}") as Members on Roles.userid = Members.ID ;`;
+        var objects = await osql.connect(sql);
+        console.log(objects);
+
+
+    </script>
 </head>
 
 <body>
@@ -13,7 +28,8 @@
     <div class="room"></div>
     </p>
     <p>参加者：</p>
-    <input type="button" id="start" value="始める">ルーム作った人が押せる
+    <table id="table1">
+        <input type="button" id="start" value="始める">ルーム作った人が押せる
 </body>
 
 </html>
