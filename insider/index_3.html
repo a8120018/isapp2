@@ -13,9 +13,13 @@
     <script>
         osql.requireLogin();
         //ルーム作成が押されたら
-        ducument.getElementByID('roombutton').addEventListener('click', async function makeRoom() {
+        document.getElementByID('roombutton').addEventListener('click', async function makeRoom() {
             //ルーム番号を生成
-            var room =
+            var array=["0","1","2","3","4","5","6","7","8","9"];
+            var n1 = array[Math.floor(Math.random() * array.length)];
+            var n2 = array[Math.floor(Math.random() * array.length)];
+            var n3 = array[Math.floor(Math.random() * array.length)];
+            var room = n1+n2+n3;
             //データベース登録
             var sql = `insert into Rooms (id, num, state, theme) values("${room}", "1", "受付中", "null");`;
             var objects = await osql.connect(sql);
@@ -27,7 +31,7 @@
             location.href = 'index_4.html';
         })
         //入室が押されたら
-        ducument.getElementByID('enter').addEventListener('click', async function enterRoom() {
+        document.getElementByID('enter').addEventListener('click', async function enterRoom() {
             var roomNum = document.getElementById('roomNum').value;
 
             var sql = `select * from Rooms where id="${roomNum}";`;
