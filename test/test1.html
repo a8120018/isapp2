@@ -21,8 +21,6 @@
         async function execInsert() {
 
             var room = document.getElementById('tf3').value;
-
-
             var sql = `insert into Test (room, situ) values("${room}", "OK");`;
             var objects = await osql.connect(sql);
             console.log(objects);

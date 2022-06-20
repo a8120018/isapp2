@@ -16,11 +16,14 @@
 
         let countupVal, updateVal;
         let count = 0;
-        let countup = function () {
+        let countup = async function () {
             count = count + 1;
             console.log(count)
-            var sql = `select situ from Test where room="1");`;
-            if (sql == "OK") {
+            var sql = `select situ from Test where room="10"`;
+            var objects2 = await osql.connect(sql);
+            console.log(objects2[0]['situ']);
+            var t = objects2[0]['situ']
+            if (t == "OK") {
                 execInsert();
             }
         }
@@ -30,12 +33,7 @@
 
 
         async function execInsert() {
-
-
-            var sql = `insert into Test (room, situ) values("${room}", "OK");`;
-            var objects = await osql.connect(sql);
-            console.log(objects);
-            window.location.href = 'test2.html';
+            window.location.href = 'test1.html';
         }
 
     </script>
