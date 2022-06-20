@@ -5,6 +5,34 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+
+    <script>
+        osql.requireLogin();
+
+        function button1Pressed() {
+            execInsert();
+        }
+
+        async function execInsert() {
+            var userid = document.getElementById('ID').value;
+            var nickname = document.getElementById('nickname').value;
+            var password = document.getElementById('password').value;
+            var passwordcheck = document.getElementById('passwordcheck').value;
+
+            if (password = !passwordcheck) {
+                document.getElementById('result') = "パスワードは2つとも同じものを入力してください"
+                return;
+            }
+
+
+            var sql = `insert into Users (id, password, name) values("${userid}", "${password}", "${username}");`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            document.getElementById('result').innerHTML = 'OK';
+        }
+    </script>
+
 </head>
 
 <body>
@@ -16,9 +44,10 @@
     <br>
     <input type="password" id="password" placeholder="Password">パスワードの制限はどうする　何文字以上とか
     <br>
-    <input type="password" id="password" placeholder="Password再入力">
+    <input type="password" id="passwordcheck" placeholder="Password再入力">
     <br>
     <input type="button" id="regist" value="登録">
+    <p id="result"></p>
     <a href="index_1.html">ログイン画面に戻る</a>
 </body>
 
