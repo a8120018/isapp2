@@ -11,12 +11,41 @@
 
     <script>
         osql.requireLogin();
+        //ルーム番号を表示
         var room = sessionStorage.getItem('room');
         document.getElementById('room').innerHTML = room;
+        //ルーム作成者か
+        var leader = sessionStorage.getItem('leader');
+        if (leader == 'yes') {
+            document.getElementById('button').innerHTML = '<input type="button" id="start" value="始める">';
+        }
+        //1秒ごとにメンバー取得
+        let countupVal, updateVal;
+        let count = 0;
+        let countup = async function () {
+            count = count + 1;
+            console.log(count)
+            var html = '<table id="table1"><tr>';
+            var sql = `select * from Users left join (select * from Roles where id="${room}") as Members on Roles.userid = Members.ID ;`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
 
-        var sql = `select * from Users left join (select * from Roles where id="${room}") as Members on Roles.userid = Members.ID ;`;
-        var objects = await osql.connect(sql);
-        console.log(objects);
+            for (var i = 0; i < objects.length; i++) {
+                html = html + `<td>${objects[i]['nickname']}</td>`;
+            }
+            document.getElementById('table1').innerHTML = html;
+        }
+        countupVal = setInterval(countup, 1000);
+
+        document.getElementById('start').addEventListener('click', async function startGame() {
+            //ルーム受付中を受付終了に更新
+            //役割決め
+            //画面遷移更新
+        })
+
+
+
+
 
 
     </script>
@@ -28,8 +57,9 @@
     <div class="room"></div>
     </p>
     <p>参加者：</p>
-    <table id="table1">
-        <input type="button" id="start" value="始める">ルーム作った人が押せる
+    <div id="table1"></div>
+    <div id="button"></div>
+
 </body>
 
 </html>
