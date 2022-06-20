@@ -13,12 +13,6 @@
     <script>
         osql.requireLogin();
 
-        window.addEventListener('onload', test())
-
-        async function test() {
-            var sql2 = `creat table Test(room varchar(10), situ varchar(10))`
-            var objects2 = await osql.connect(sql2);
-        }
 
         function button1Pressed() {
             execInsert();
