@@ -6,7 +6,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
     <script>
+        osql.requireLogin();
 
+        async function buttonPressed() {
+            var userid = document.getElementById('tf1').value;
+            var password = document.getElementById('tf2').value;
+
+            var sql = `select * from Users where id="${userid}";`;
+            var objects = await osql.connect(sql);
+            if (objects.length <= 0) {
+                document.getElementById('result').innerHTML = 'ログイン失敗：ユーザが見つかりません';
+                return;
+            }
+            if (objects[0].password != password) {
+                document.getElementById('result').innerHTML = 'ログイン失敗：パスワードが違います';
+                return;
+            }
+
+            sessionStorage.setItem('userid', objects[0].id);
+            sessionStorage.setItem('username', objects[0].name);
+
+            location.href = 'usertop.html';
+        }
     </script>
 </head>
 
