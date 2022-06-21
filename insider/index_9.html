@@ -28,8 +28,17 @@
 
             html = html + `<tr><td>${objects2[i]['nickname']}</td><td>${objects[i]['qustion']}</td><td>${objects[i]['answer']}</td></tr>`;
         }
-
         document.getElementById('table').innerHTML = html;
+
+        document.getElementById('submit').addEventListener('click', async function submit() {
+            var answer = document.getElementById('guess').value;
+            var sql3 = `insert into Guesses (userid, theme, point1, insider, point2, room) value ('${userid}', '${answer}', 'null', 'null', '${room}');`;
+            var objects3 = await osql.connect(sql3);
+
+            //画面遷移
+            location.href = 'index_11.html';
+        });
+
     </script>
 </head>
 
