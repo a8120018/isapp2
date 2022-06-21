@@ -12,16 +12,21 @@
 
     <script>
         osql.requireLogin();
+        var room = sessionStorage.getItem('userid');
         //ルーム作成が押されたら
         document.getElementByID('roombutton').addEventListener('click', async function makeRoom() {
             //ルーム番号を生成
-            var array=["0","1","2","3","4","5","6","7","8","9"];
+            var array = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
             var n1 = array[Math.floor(Math.random() * array.length)];
             var n2 = array[Math.floor(Math.random() * array.length)];
             var n3 = array[Math.floor(Math.random() * array.length)];
-            var room = n1+n2+n3;
+            var room = n1 + n2 + n3;
             //データベース登録
             var sql = `insert into Rooms (id, num, state, theme) values("${room}", "1", "受付中", "null");`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            //画面遷移情報更新
+            var sql = `insert into Pages (room, start, go) values("${room}", "null", "null");`;
             var objects = await osql.connect(sql);
             console.log(objects);
             //セッションストレージに入れる
@@ -38,11 +43,14 @@
             var objects = await osql.connect(sql);
             console.log(objects);
 
-
             if (objects !== null && object[0].state == "受付中") {
                 //ルーム番号roomNumをセッションストレージに入れる
                 sessionStorage.setItem('room', roomNum);
                 sessionStorage.setItem('leader', 'no');
+                //役割情報にメンバーと部屋名を入れる
+                var sql = `insert into Roles (userid, role, roomid) values("${userid}", "null", "${room}");`;
+                var objects = await osql.connect(sql);
+                console.log(objects);
                 //データベース更新
                 var sql = `update Rooms set num="${objects[0]['num'] + 1}"`;
                 var objects = await osql.connect(sql);
