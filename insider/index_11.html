@@ -5,6 +5,25 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+    <script>
+        osql.requireLogin();
+        var room = sessionStorage.getItem('room');
+        display();
+        async function display() {
+            var sql = `select theme from Rooms where id = "${room}" `; //参加ルームのお題をルームテーブルからとってくる
+            var objects = await osql.connect(sql);
+            console.log(objects)
+            var answernum = objects[0]['theme']
+
+
+            var sql2 = `select theme from Themes where num="${answernum}" `; //お題名取得
+            var objects2 = await osql.connect(sql2);
+            console.log(objects);
+            var answertheme = objects2[0]['theme']
+            document.getElementById('theme3') = answertheme;
+        }
+    </script>
+
 </head>
 
 <body>
