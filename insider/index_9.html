@@ -5,6 +5,32 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        var userid = sessionStorage.getItem('userid');
+
+        var sql = `select * from Chats where roomid="${room}";`;
+        var objects = await osql.connect(sql);
+        console.log(objects);
+
+
+        var html = '<table id="table2">'
+        for (var i = 0; i < objects.length; i++) {
+            var sql2 = `select * from Users where ID="${objects[i]['ID']}";`;
+            var objects2 = await osql.connect(sql2);
+
+            html = html + `<tr><td>${objects2[i]['nickname']}</td><td>${objects[i]['qustion']}</td><td>${objects[i]['answer']}</td></tr>`;
+        }
+
+        document.getElementById('table').innerHTML = html;
+    </script>
 </head>
 
 <body>
@@ -13,6 +39,7 @@
     <input type="text" id="guess">
     <br>
     <input type="button" id="submit" value="OK">
+    <div id="table"></div>
 </body>
 
 </html>
