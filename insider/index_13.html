@@ -14,10 +14,10 @@
             console.log(objects);
             var insideruserid = objects[0]['userid']
 
-            var sql2 = `select name from Users where id="${insideruserid}";`; //インサイダーの人のuseridの人の名前をUserからとってくる　多分間違ってる
+            var sql2 = `select nickname from Users where id="${insideruserid}";`; //インサイダーの人のuseridの人の名前をUserからとってくる　多分間違ってる
             var objects2 = await osql.connect(sql2);
             console.log(objects2);
-            var insidername = objects[0]['name']
+            var insidername = objects[0]['nickname']
 
             document.getElementById('insider').innerHTML = insidername;
         }
