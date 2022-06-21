@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="index.css">
     <script>
         osql.requireLogin();
+        var room = sessionStorage.getItem('room');
         display();
         async function display() {
             var sql = `select userid from Roles where roomid="${room}" and role="insider";`; //インサイダーの人のuserid取得
@@ -22,6 +23,7 @@
             document.getElementById('insider').innerHTML = insidername;
         }
 
+
     </script>
 </head>
 
@@ -35,6 +37,7 @@
     <table id="table4">
         <!--
             <tr><td>順位</td><td>プレイヤー</td><td>１００pt</td></tr>
+            
         -->
 </body>
 
