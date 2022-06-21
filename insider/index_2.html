@@ -25,7 +25,7 @@
             }
 
 
-            var sql = `insert into Users (id, password, name) values("${userid}", "${password}", "${nickname}");`;
+            var sql = `insert into Users (id, nickname, password) values("${userid}", "${password}", "${nickname}");`;
             var objects = await osql.connect(sql);
             console.log(objects);
 
