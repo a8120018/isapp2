@@ -5,10 +5,37 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        document.getElementById('roomnum').innerHTML = room;
+        var userid = sessionStorage.getItem('userid');
+
+        //カウント
+        let countupVal, updateVal;
+        let count = 30;
+        let countup = function () {
+            count = count - 1;
+            document.getElementById("timer").innerHTML = count;
+            if (count == 0) {
+                //３０秒経ったら
+            }
+        }
+        countupVal = setInterval(countup, 1000);
+
+    </script>
 </head>
 
 <body>
-
+    <p>ルーム：
+    <div class="room" id="roomnum"></div>
+    </p>
 </body>
 
 </html>
