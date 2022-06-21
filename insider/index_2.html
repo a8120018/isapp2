@@ -20,12 +20,12 @@
             var passwordcheck = document.getElementById('passwordcheck').value;
 
             if (password = !passwordcheck) {
-                document.getElementById('result') = "パスワードは2つとも同じものを入力してください"
+                wondow.alert("パスワードは2つとも同じものを入力してください")
                 return;
             }
 
 
-            var sql = `insert into Users (id, password, name) values("${userid}", "${password}", "${nickname}");`;
+            var sql = `insert into Users (id, nickname, password) values("${userid}", "${password}", "${nickname}");`;
             var objects = await osql.connect(sql);
             console.log(objects);
 

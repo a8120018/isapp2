@@ -5,6 +5,26 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+    <script>
+        osql.requireLogin();
+        var room = sessionStorage.getItem('room');
+        display();
+        async function display() {
+            var sql = `select userid from Roles where roomid="${room}" and role="insider";`; //インサイダーの人のuserid取得
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var insideruserid = objects[0]['userid']
+
+            var sql2 = `select nickname from Users where id="${insideruserid}";`; //インサイダーの人のuseridの人の名前をUserからとってくる　多分間違ってる
+            var objects2 = await osql.connect(sql2);
+            console.log(objects2);
+            var insidername = objects[0]['nickname']
+
+            document.getElementById('insider').innerHTML = insidername;
+        }
+
+
+    </script>
 </head>
 
 <body>
@@ -17,6 +37,7 @@
     <table id="table4">
         <!--
             <tr><td>順位</td><td>プレイヤー</td><td>１００pt</td></tr>
+            
         -->
 </body>
 

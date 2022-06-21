@@ -5,6 +5,30 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+    <script>
+        osql.requireLogin();
+        var room = sessionStorage.getItem('room');
+        memberArray = []
+        $(document).ready(function () {
+            insiderSelect();
+        });
+
+        async function insiderSelect() {
+            // メンバーの名前が入った配列か何か作って、そこからインデクス指定して、投票者のところにメンバー名出すようにしたい　あとですすめる
+            var sql = `select userid from Roles where roomid = "${room}" `; //ルームの参加者
+            var objects = await osql.connect(sql);
+            console.log(objects)
+            for (let i = 0; i++; i < objects.length) { // ルーム数絞って出てきた人の名前の数繰り返したい　多分object.lentghじゃない
+                var memberid = objects[i]['userid']
+                memberArray.push(memberid)
+                // for文の中にsql入れていいのか
+            }
+            console.log(memberArray)
+
+        }
+
+
+    </script>
 </head>
 
 <body>

@@ -5,6 +5,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        document.getElementById('roomnum').innerHTML = room;
+        var userid = sessionStorage.getItem('userid');
+
+
+    </script>
 </head>
 
 <body>

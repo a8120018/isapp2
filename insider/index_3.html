@@ -12,6 +12,14 @@
 
     <script>
         osql.requireLogin();
+
+        windows.onload = function () {
+            var username = sessionStrage.getItem('usename')
+            document.getElementById('name') = username;
+        }
+
+
+
         var room = sessionStorage.getItem('userid');
         //ルーム作成が押されたら
         document.getElementByID('roombutton').addEventListener('click', async function makeRoom() {
@@ -68,6 +76,7 @@
 
 <body>
     <p class="title">インサイダーゲーム</p>
+    <p>ようこそ<span id=name>xx</span>さん</p>
     <p>ルームを作成</p>
     <input type="button" id="roombutton" value="作成">
     <p>ルーム入室</p>
