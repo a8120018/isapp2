@@ -36,7 +36,8 @@
             var sql = `select role from Roles where roomid="${room}" and userid="${userid}";`;
             var objects = await osql.connect(sql);
             console.log(objects);
-            var role = objects[0]['role']
+            var role = objects[0]['role'];
+            sessionStorage.setItem('role', role);
             document.getElementById('role').innerHTML = role;
         }
         //インサイダーとゲームマスターにだけお題
