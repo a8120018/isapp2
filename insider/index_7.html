@@ -13,19 +13,16 @@
     <script>
         osql.requireLogin();
         //ルーム番号を表示
-        var room = sessionStorage.getItem('room');
-        document.getElementById('roomnum').innerHTML = room;
-        var userid = sessionStorage.getItem('userid');
-        var username=sessionStorage.getitem('username');
+        windows.onload = function () {
+            var room = sessionStorage.getItem('room');
+            document.getElementById('roomnum').innerHTML = room;
 
-        async function buttonPressed() {
-            var question = document.getElementById('question').value;
-            var sql = `insert into Chats (userid, username, question, roomid, questnum) values("${userid}", "${username}", ${question}, "${room}", );`;
-            //何回目の質問か(questnum)入れる方法分からん
-        }
+            var userid = sessionStorage.getItem('userid');
+            var username = sessionStorage.getitem('username');
 
-        
-
+            var role = sessionStorage.getitem('role');
+            document.getElementById('role').innerHTML = role;
+            }
 
 
         //カウント
@@ -43,6 +40,13 @@
         }
         countupVal = setInterval(countup, 1000);
 
+        async function buttonPressed() {
+            //送信ボタン押されたら
+            var question = document.getElementById('question').value;
+            var sql = `insert into Chats (userid, username, question, roomid, questnum) values("${userid}", "${username}", ${question}, "${room}", );`;
+            //何回目の質問か(questnum)入れる方法分からん
+        }
+
     </script>
 </head>
 
@@ -54,7 +58,8 @@
     <button onclick="buttonPressed()">送信</button>
     <br>
     <p>あと <span id="timer">30</span> 秒</p>
-    <p id="result"></p>
+    <hr>
+    あなたの役割:<span id="role">XX</span>
 </body>
 
 </html>
