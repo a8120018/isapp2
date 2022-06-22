@@ -5,6 +5,45 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        displayTheme()
+
+
+        async function displayTheme() {
+            var sql = `select theme from Rooms where id="${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var themeNum = objects[0]['theme']
+
+            var sql = `select theme from Themes where num="${themeNum}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]['theme']);
+
+            document.getElementById('theme2').innerHTML = objects[0]['theme'];
+        }
+
+
+        var html = '<table id="table4">'
+
+        var sql2 = `select theme from Guesses where room="${room}";`;
+        var objects2 = await osql.connect(sql2);
+
+        for (var i = 0; i < objects.length; i++) {
+
+            var answer = objects2[i]['theme']
+            html = html + `<tr><td>${answer}</td><td><input type="radio" value="100" name="radio${i}"><input type="radio" value="80" name="radio${i}"><input type="radio" value="60" name="radio${i}"><input type="radio" value="40" name="radio${i}"><input type="radio" value="20" name="radio${i}"><input type="radio" value="0" name="radio${i}">/td>`
+        }
+        document.getElementById('table').innerHTML = html;
+
+    </script>
 </head>
 
 <body>
@@ -13,13 +52,7 @@
         <span id="theme2"></span>です
     </p>
     <p>各解答に点数をつけてください</p>
-
-    <!--
-                javascriptでこれを入れるようにする
-                <table id="table1">
-                    <tr><th>${いよかん}</th>
-                        <td><input type="radio" name="radio${i}" calss="s100" value="100">80604020</td></tr>
-            -->
+    <div id="table"></div>
 </body>
 
 </html>
