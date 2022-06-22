@@ -16,6 +16,9 @@
         var room = sessionStorage.getItem('room');
         document.getElementById('roomnum').innerHTML = room;
         var userid = sessionStorage.getItem('userid');
+        var username=sessionStorage.getitem('username');
+
+        var question = document.getElementById('question').value;
 
         //カウント
         let countupVal, updateVal;
@@ -25,6 +28,8 @@
             document.getElementById("timer").innerHTML = count;
             if (count == 0) {
                 //３０秒経ったら
+                var sql = `insert into Chats (userid, username, question, roomid, questnum) values("${userid}", "${username}", ${question}, "${room}", );`;
+
             }
         }
         countupVal = setInterval(countup, 1000);
