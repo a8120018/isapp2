@@ -12,23 +12,15 @@
         osql.requireLogin();
 
         async function buttonPressed() {
-            var userid = document.getElementById('ID').value;
-            var password = document.getElementById('password').value;
-
-            var sql = `select * from Users where id="${userid}";`;
+            var me = await osql.getMe();
+            console.log(me);
+            //自分のデータベースを作り
+            //create table Users(id varchar(128) primary key, fname varchar(128), lname varchar(128));
+            //を発行しておくこと
+            var sql = `insert ignore into Users values('${me.id}', '${me.fname}', '${me.lname}')`;
             var objects = await osql.connect(sql);
-            if (objects.length <= 0) {
-                document.getElementById('result').innerHTML = 'ログイン失敗：ユーザが見つかりません';
-                return;
-            }
-            if (objects[0].password != password) {
-                document.getElementById('result').innerHTML = 'ログイン失敗：パスワードが違います';
-                return;
-            }
-
-            sessionStorage.setItem('userid', objects[0].id);
-            sessionStorage.setItem('username', objects[0].name);
-
+            sessionStorage.setItem('userid', me.id);
+            sessionStorage.setItem('username', me.lname + ' ' + me.fname);
             location.href = 'index_3.html';
         }
     </script>
@@ -36,12 +28,9 @@
 
 <body>
     <p class="title">インサイダーゲーム</p>
-    <p id="login" class="center">ログイン</p>
-    <p class="center"><input type="text" id="ID" placeholder="ID">
-    <input type="password" id="password" placeholder="Password" ></p>
-    <p id="result" class="center"></p>
-    <p class="center1"><button onclick="buttonPressed()" class="center">ログイン</button></p>
-    <p class="center1"><a href="index_2.html">新規登録はこちら</a></p>
+
+    <p class="center1"><button onclick="buttonPressed()" class="center">スタート</button></p>
+
 </body>
 
 </html>
