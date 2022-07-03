@@ -5,66 +5,76 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="index.css">
-    <script>
-        osql.requireLogin();
-
-        var room = sessionStorage.getItem('room');
-        display();
-        async function display() {
-            var sql = `select theme from Rooms where id = "${room}" `; //参加ルームのお題をルームテーブルからとってくる
-            var objects = await osql.connect(sql);
-            console.log(objects)
-            var answernum = objects[0]['theme']
 
 
-            var sql2 = `select theme from Themes where num="${answernum}" `; //お題名取得
-            var objects2 = await osql.connect(sql2);
-            console.log(objects);
-            var answertheme = objects2[0]['theme']
-            document.getElementById('theme3') = answertheme;
-        }
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
 
-        var room = sessionStorage.getItem('room');
-        memberArray = []
-        $(document).ready(function () {
-            insiderSelect();
-        });
-
-        async function insiderSelect() {
-            // メンバーの名前が入った配列か何か作って、そこからインデクス指定して、投票者のところにメンバー名出すようにしたい　あとですすめる
-            var sql = `select userid from Roles where roomid = "${room}" `; //ルームの参加者
-            var objects = await osql.connect(sql);
-            console.log(objects)
-            for (let i = 0; i++; i < objects.length) { // ルーム数絞って出てきた人の名前の数繰り返したい　多分object.lentghじゃない
-                var memberid = objects[i]['userid']
-                memberArray.push(memberid)
-                // for文の中にsql入れていいのか
-            }
-            console.log(memberArray)
-
-        }
-
-
-    </script>
 </head>
 
 <body>
     <p class="title">インサイダーゲーム</p>
-    <p>お題は
-        <span id="theme3"></span>でした
+    <p>お題は<span id="theme3"></span>でした
     </p>
     <p>プレイヤーの解答</p>
-    <table id="table2">
-        <!--   <tr><td>プレイヤー</td><td>いよかん</td><td>スコア</td></tr>  -->
+    <table id="table2"></table>
+    <p>インサイダー投票</p>
+    <p>インサイダーだと思う人を選んでください</p>
+    <div id="table"></div>
 
 
-        <p>インサイダー投票</p>
-        <p>インサイダーだと思う人に投票してください</p>投票？選ぶの方が良いか？
-        <table id="table3">
-            <!--
-        <tr><td>プレイヤー名</td>
-        <td><input type="button" id="guessIns" value="選択"></td></tr>
-    -->
+
+
+    <script>
+        osql.requireLogin();
+
+        var room = sessionStorage.getItem('room');
+        var userid = sessionStorage.getItem('userid');
+        display();
+
+
+        async function display() {
+            var sql = `select * from Themes inner join Rooms on Themes.id = Rooms.themenum and Rooms.id = "${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+            document.getElementById('theme3').innerHTML = `${objects[0]['theme']}`;
+        }
+
+        insiderSelect();
+
+        async function insiderSelect() {
+            var html = '<table id="table3">';
+            // メンバーの名前が入った配列か何か作って、そこからインデクス指定して、投票者のところにメンバー名出すようにしたい　あとですすめる
+            var sql = `select * from Users inner join Points on Users.id = Points.userid and Points.roomid ="${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects)
+
+            for (let i = 0; i < objects.length; i++) { // ルーム数絞って出てきた人の名前の数繰り返したい　多分object.lentghじゃない
+
+                html = html + `<tr><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}<br>回答：${objects[i]['guesstheme']}</td><td><input type="button" value="投票" id="${objects[i]['id']} onclick="buttonPressed(this)" class="button"></td></tr>`
+            }
+            document.getElementById('table').innerHTML = html;
+
+        }
+
+        async function buttonPressed(obj) {
+            var user = obj.id; // a8120125@gsuite.si..... 選択したインサイダーのID
+            var sql = `select * from Users inner join Points on Users.id = Points.userid and Points.roomid ="${room}" and Points.userid="${user}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects)
+            if (window.confirm(`${objects[0]['lname'] + ' ' + objects[0]['fname']}さんでよろしいですか？`)) {
+                // OKが選択された時の処理
+                var sql = `update Points set selectinsider = "${user}" where roomid ="${room}" and userid="${userid}";`;
+                var objects = await osql.connect(sql);
+                console.log(objects)
+            }
+
+
+
+        }
+
+    </script>
 </body>
 
 </html>
