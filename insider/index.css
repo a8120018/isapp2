@@ -1,17 +1,21 @@
+/*背景色*/
 .color{
     background-color: #c0c0c0;
 }
 
+/*タイトル*/
 .title {
     text-align: center;
     font-size: 60px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
+/*ダーゲの色*/
 .red{
     color: red;
 }
 
+/*ユーザトップのボタン*/
 .button {
     width: 130px;
     height: 50px;
@@ -21,16 +25,19 @@
     background-color: #696969;
 }
 
+/*中央揃え*/
 .center{
     text-align: center;
     font-size:20px;
 }
 
+/*中央揃えフォントサイズ違い*/
 .center1 {
     text-align: center;
     font-size: 15px;
 }
 
+/*enterroomのレイアウト*/
 ul.layout li{
     margin: 0 10px 10px 0;
     padding: 10px;
@@ -41,8 +48,15 @@ ul.layout li{
     font-size:20px;
 }
 
+/*テキストボックスの丸角*/
 .textbox{
     width:200px;
     height:40px;
     border-radius: 10px;
+}
+
+/*memberのレイアウト*/
+.member{
+    font-size:20px;
+    margin: 0 0 15px 20%;
 }
