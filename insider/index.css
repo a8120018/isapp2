@@ -13,3 +13,13 @@
     text-align: center;
     font-size: 15px;
 }
+
+ul.layout li{
+    margin: 0 10px 10px 0;
+    padding: 10px;
+    float:left;
+    width: 40%;
+    height: 4em;
+    list-style: none;
+    font-size:20px;
+}
