@@ -10,6 +10,24 @@
     <script type="text/javascript" src="lib/osql.js"></script>
     <script type="text/javascript" src="settings.js"></script>
 
+
+</head>
+
+<body>
+    <p>ルーム：
+    <div class="room" id="roomnum"></div>
+    </p>
+    <p class="title">インサイダーゲーム</p>
+    <p>あなたは<span id="role"></span>です</p>
+    <p>
+        <span id="theme"></span>
+    </p>
+    <p>あと
+        <span id="timer"></span>秒で遷移します
+    </p>
+
+
+
     <script>
         osql.requireLogin();
         //ルーム番号を表示
@@ -33,50 +51,33 @@
 
 
         async function display() {
-            var sql = `select role from Roles where roomid="${room}" and userid="${userid}";`;
+            var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
             var objects = await osql.connect(sql);
-            console.log(objects);
+
             var role = objects[0]['role'];
+            console.log(objects[0]['role']);
             sessionStorage.setItem('role', role);
             document.getElementById('role').innerHTML = role;
+            //インサイダーとゲームマスターにだけお題
+            if (role == "インサイダー" || role == "ゲームマスター") {
+                displayTheme();
+            }
         }
-        //インサイダーとゲームマスターにだけお題
-        if (role == "インサイダー" || role == "ゲームマスター") {
-            displayTheme();
-        }
+
 
 
         async function displayTheme() {
-            var sql = `select theme from Rooms where id="${room}";`;
-            var objects = await osql.connect(sql);
-            console.log(objects);
-            var themeNum = objects[0]['theme']
 
-            var sql = `select theme from Themes where num="${themeNum}";`;
+            var sql = `select * from Themes inner join Rooms on Themes.id = Rooms.themenum and Rooms.id = "${room}";`;
             var objects = await osql.connect(sql);
-            console.log(objects[0]['theme']);
+            console.log(objects[0]);
 
-            document.getElementById('theme').innerHTML = objects[0]['theme'];
+            document.getElementById('theme').innerHTML = `お題は${objects[0]['theme']}です`;
         }
 
 
 
     </script>
-</head>
-
-<body>
-    <p>ルーム：
-    <div class="room" id="roomnum"></div>
-    </p>
-    <p class="title">インサイダーゲーム</p>
-    <p>あなたは<span id="role"></span>です</p>
-    <p>お題は
-        <span id="theme"></span>です
-    </p>
-    <input type="button" id="start" value="OK">
-    <p>あと
-        <span id="timer"></span>秒で遷移します
-    </p>
 </body>
 
 </html>
