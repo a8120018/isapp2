@@ -25,12 +25,16 @@
     <script>
         osql.requireLogin();
         //ルーム番号を表示
+
         var room = sessionStorage.getItem('room');
         console.log(room)
         document.getElementById('room').innerHTML = room;
         //ルーム作成者か
         var leader = sessionStorage.getItem('leader');
-
+        var username = sessionStorage.getItem('username')
+        var userid = sessionStorage.getItem('userid')
+        sessionStorage.setItem('userid', userid);
+        sessionStorage.setItem('username', username);
         if (leader == 'yes') {
             document.getElementById('button').innerHTML = '<input type="button" id="start" value="始める">';
         }
