@@ -17,8 +17,6 @@
     <p class="title">インサイダーゲーム</p>
     <p>お題は<span id="theme3"></span>でした
     </p>
-    <p>プレイヤーの解答</p>
-    <table id="table2"></table>
     <p>インサイダー投票</p>
     <p>インサイダーだと思う人を選んでください</p>
     <div id="table"></div>
@@ -51,8 +49,9 @@
             console.log(objects)
 
             for (let i = 0; i < objects.length; i++) { // ルーム数絞って出てきた人の名前の数繰り返したい　多分object.lentghじゃない
-
-                html = html + `<tr><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}<br>回答：${objects[i]['guesstheme']}</td><td><input type="button" value="投票" id="${objects[i]['id']} onclick="buttonPressed(this)" class="button"></td></tr>`
+                if (objects[i]['userid'] !== userid) {
+                    html = html + `<tr><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}<br>回答：${objects[i]['guesstheme']}</td><td><input type="button" value="投票" id="${objects[i]['id']}" onclick="buttonPressed(this)" class="button"></td></tr>`
+                }
             }
             document.getElementById('table').innerHTML = html;
 
@@ -63,11 +62,13 @@
             var sql = `select * from Users inner join Points on Users.id = Points.userid and Points.roomid ="${room}" and Points.userid="${user}";`;
             var objects = await osql.connect(sql);
             console.log(objects)
-            if (window.confirm(`${objects[0]['lname'] + ' ' + objects[0]['fname']}さんでよろしいですか？`)) {
+
+            if (window.confirm(`${objects[0]['lname'] + ' ' + objects[0]['fname']}さんに投票でよろしいですか？`)) {
                 // OKが選択された時の処理
                 var sql = `update Points set selectinsider = "${user}" where roomid ="${room}" and userid="${userid}";`;
                 var objects = await osql.connect(sql);
                 console.log(objects)
+                location.href = 'result.html'
             }
 
 
