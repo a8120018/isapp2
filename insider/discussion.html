@@ -27,6 +27,8 @@
     <p>話し合いの時間<br>ゲームマスターに1人ずつ質問してください
     <p>残り時間
         <span id="timer2"></span>
+        <button onclick="buttonPlusPressed()" class="button">1分追加</button>
+        <button onclick="buttonMinusPressed()" class="button">1分減少</button>
     </p>
 
 
@@ -37,15 +39,27 @@
         var room = sessionStorage.getItem('room');
         document.getElementById('roomnum').innerHTML = room;
         var userid = sessionStorage.getItem('userid');
-        document.getElementById("timer2").innerHTML = `4 : 00`;
+        document.getElementById("timer2").innerHTML = `1 : 10`;
 
         let countupVal, updateVal;
-        let count = 20;
+        let count = 70;
+        async function buttonPlusPressed() {
+            count = count + 60;
+        }
+        async function buttonMinusPressed() {
+            count = count - 60;
+        }
         let countup = function () {
             count = count - 1;
             var second = count % 60
             var minute = Math.floor(count / 60)
-            document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
+            if (second < 10) {
+                document.getElementById("timer2").innerHTML = `${minute} : 0${second}`;
+            }
+            else {
+                document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
+            }
+
             if (count == 0) {
                 //画面遷移
                 location.href = 'theme.html';
