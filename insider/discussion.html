@@ -15,17 +15,18 @@
 
 <body>
     <p>ルーム：
-    <div class="room" id="roomnum"></div>
+        <span class="room" id="roomnum"></span>
     </p>
-    <p class="title">インサイダーゲーム</p>
-    <p>話し合いの時間　ゲームマスターに1人ずつ質問してください
+
+
     <p>役割：<span id="role"></span></p>
     <p>
         <span id="theme"></span>
     </p>
-
+    <p class="title">インサイダーゲーム</p>
+    <p>話し合いの時間　ゲームマスターに1人ずつ質問してください
     <p>残り時間
-        <span id="timer"></span>
+        <span id="timer2"></span>
     </p>
 
 
@@ -75,7 +76,7 @@
             var objects = await osql.connect(sql);
             console.log(objects[0]);
 
-            document.getElementById('theme').innerHTML = `お題は${objects[0]['theme']}です`;
+            document.getElementById('theme').innerHTML = `お題：<span id="theme3">${objects[0]['theme']}</span>`;
         }
 
 

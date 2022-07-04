@@ -15,12 +15,12 @@
 
 <body>
     <p>ルーム：
-    <div class="room" id="roomnum"></div>
+        <span class="room" id="roomnum"></span>
     </p>
     <p class="title">インサイダーゲーム</p>
     <div class="center2">
-    <p>あなたは　<span id="role"></span>　です</p>
-    <p>お題は　<span id="theme"></span>　です</p>
+        <p>あなたは　<span id="role"></span>　です</p>
+        <p><span id="theme"></span></p>
     </div>
     <p>あと
         <span id="timer"></span>秒で遷移します
@@ -72,7 +72,7 @@
             var objects = await osql.connect(sql);
             console.log(objects[0]);
 
-            document.getElementById('theme').innerHTML = `お題は${objects[0]['theme']}です`;
+            document.getElementById('theme').innerHTML = `お題は<span id="theme2">　${objects[0]['theme']}　</span>です`;
         }
 
 
