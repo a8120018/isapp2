@@ -24,7 +24,7 @@
         <span id="theme"></span>
     </p>
     <p class="title">インサイダーゲーム</p>
-    <p>話し合いの時間　ゲームマスターに1人ずつ質問してください
+    <p>話し合いの時間<br>ゲームマスターに1人ずつ質問してください
     <p>残り時間
         <span id="timer2"></span>
     </p>
@@ -37,7 +37,7 @@
         var room = sessionStorage.getItem('room');
         document.getElementById('roomnum').innerHTML = room;
         var userid = sessionStorage.getItem('userid');
-        document.getElementById("timer").innerHTML = `4 : 00`;
+        document.getElementById("timer2").innerHTML = `4 : 00`;
 
         let countupVal, updateVal;
         let count = 20;
@@ -45,7 +45,7 @@
             count = count - 1;
             var second = count % 60
             var minute = Math.floor(count / 60)
-            document.getElementById("timer").innerHTML = `${minute} : ${second}`;
+            document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
             if (count == 0) {
                 //画面遷移
                 location.href = 'theme.html';
