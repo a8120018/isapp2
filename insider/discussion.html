@@ -28,7 +28,6 @@
     <p>残り時間
         <span id="timer2"></span>
         <button onclick="buttonPlusPressed()" class="button">1分追加</button>
-        <button onclick="buttonMinusPressed()" class="button">1分減少</button>
     </p>
 
 
@@ -46,9 +45,7 @@
         async function buttonPlusPressed() {
             count = count + 60;
         }
-        async function buttonMinusPressed() {
-            count = count - 60;
-        }
+
         let countup = function () {
             count = count - 1;
             var second = count % 60
