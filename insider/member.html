@@ -17,7 +17,7 @@
     <p class="member">ルーム：
         <span id="room"></span>
     </p>
-    <p class="member">参加者：</p>
+    <p class="member">参加者：
     <div id="table1"></div>
     <div id="button"></div>
 
@@ -35,6 +35,7 @@
         var userid = sessionStorage.getItem('userid')
         sessionStorage.setItem('userid', userid);
         sessionStorage.setItem('username', username);
+        countup();
         if (leader == 'yes') {
             document.getElementById('button').innerHTML = '<input type="button" id="start" value="始める">';
         }
