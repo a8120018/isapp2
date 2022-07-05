@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+
+</head>
+
+<body>
+    <p>ルーム：
+        <span class="room" id="roomnum"></span>
+    </p>
+
+
+    <p>役割：<span id="role"></span></p>
+    <p>
+        <span id="theme"></span>
+    </p>
+    <p class="title">インサイダーゲーム</p>
+    <p>話し合いの時間<br>ゲームマスターに1人ずつ質問してください
+    <p>残り時間
+        <span id="timer2"></span>
+        <button onclick="buttonPlusPressed()" class="button">1分追加</button>
+    </p>
+
+
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        document.getElementById('roomnum').innerHTML = room;
+        var userid = sessionStorage.getItem('userid');
+        document.getElementById("timer2").innerHTML = `1 : 10`;
+
+        let countupVal, updateVal;
+        let count = 10;
+        async function buttonPlusPressed() {
+            count = count + 60;
+        }
+
+        let countup = function () {
+            count = count - 1;
+            var second = count % 60
+            var minute = Math.floor(count / 60)
+            if (second < 10) {
+                document.getElementById("timer2").innerHTML = `${minute} : 0${second}`;
+            }
+            else {
+                document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
+            }
+
+            if (count == 0) {
+                //画面遷移
+                location.href = 'testtheme.html';
+            }
+        }
+        countupVal = setInterval(countup, 1000);
+
+        display();
+
+
+        async function display() {
+            var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
+            var objects = await osql.connect(sql);
+
+            var role = objects[0]['role'];
+            console.log(objects[0]['role']);
+            sessionStorage.setItem('role', role);
+            document.getElementById('role').innerHTML = role;
+            //インサイダーとゲームマスターにだけお題
+            if (role == "インサイダー" || role == "ゲームマスター") {
+                displayTheme();
+            }
+        }
+
+        async function displayTheme() {
+
+            var sql = `select * from Themes inner join Rooms on Themes.id = Rooms.themenum and Rooms.id = "${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+
+            document.getElementById('theme').innerHTML = `お題：<span id="theme3">${objects[0]['theme']}</span>`;
+        }
+
+
+
+    </script>
+</body>
+
+</html>
