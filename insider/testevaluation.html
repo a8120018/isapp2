@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        displayTheme()
+
+
+
+
+        async function displayTheme() {
+
+            var sql = `select * from Themes inner join Rooms on Themes.id = Rooms.themenum and Rooms.id = "${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+
+            document.getElementById('theme2').innerHTML = `<span id="theme2">　${objects[0]['theme']}　</span>`;
+        }
+
+
+
+        let countup = async function () {
+            var sql1 = `select roomnum from Rooms where id="${room}";`;
+            var objects1 = await osql.connect(sql1);
+
+            var sql3 = `select guesstheme from Points where roomid="${room}";`;
+            var objects3 = await osql.connect(sql3);
+            var t = 0;
+            for (var i = 0; i < objects3.length; i++) {
+                if (objects3[i]['guesstheme'] !== "null") {
+                    t = t + 1;
+                }
+            }
+            if (t == objects1[0]['roomnum'] - 1) {
+
+                var html = '<table id="table4">'
+                var sql2 = `select * from Points where roomid="${room}";`;
+                var objects2 = await osql.connect(sql2);
+
+                for (var i = 0; i < objects2.length; i++) {
+
+                    var answer = objects2[i]['guesstheme']
+                    html = html + `<tr><td>${answer}</td><td><input type="radio" id="a${i}" value="100" name="${objects2[i]['userid']}"><label for="a${i}">○</label><input type="radio" value="0" id="b${i}" name="${objects2[i]['userid']}"><label for="b${i}">×</label></td></tr>`
+                }
+                document.getElementById('table').innerHTML = html;
+            }
+        }
+
+        setInterval(countup, 1000);
+
+
+        async function decide() {
+            //全部入力されていたら実行うするif文入れる
+            var sql2 = `update Rooms set go = "OK" where id="${room}";`;
+            var objects2 = await osql.connect(sql2);
+            //ここ分かりません　それぞれのラジオボタンに対応する点をデータベースに入れる　Points
+            // for (vari = 0; i < ; i++) {
+            //   var sql2 = `update Points set where roomid="${room}";`;
+            // var objects2 = await osql.connect(sql2);
+
+
+            //}
+            location.href = "testvote.html";
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <p class="title">インサイダーゲーム</p>
+    <p>お題は
+        <span id="theme2"></span>です
+    </p>
+    <p>各回答の正誤判定をしてください</p>
+    <div id="table"></div>
+    <input type="button" id="submit" value="決定" onclick="decide()">
+</body>
+
+</html>
