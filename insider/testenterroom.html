@@ -89,7 +89,7 @@
                 var objects = await osql.connect(sql);
                 console.log(objects);
                 //データベース更新
-                var sql = `update Rooms set roomnum="${Number(membernum) + 1}"`;
+                var sql = `update Rooms set roomnum="${Number(membernum) + 1}" where id = "${roomNum}"`;
                 var objects = await osql.connect(sql);
                 console.log(objects);
                 //ページを４その他の人用に遷移
