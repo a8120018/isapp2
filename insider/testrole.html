@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+
+</head>
+
+<body>
+    <p>ルーム：
+        <span class="room" id="roomnum"></span>
+    </p>
+    <p class="title">インサイダーゲーム</p>
+    <div class="center2">
+        <p>あなたは　<span id="role"></span>　です</p>
+        <p><span id="theme"></span></p>
+    </div>
+    <p>あと
+        <span id="timer"></span>秒で遷移します
+    </p>
+
+
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        document.getElementById('roomnum').innerHTML = room;
+        var userid = sessionStorage.getItem('userid');
+        document.getElementById("timer").innerHTML = 15;
+
+        let countupVal, updateVal;
+        let count = 15;
+        let countup = function () {
+            count = count - 1;
+            document.getElementById("timer").innerHTML = count;
+            if (count == 0) {
+                //画面遷移
+                location.href = 'testdiscussion.html';
+            }
+        }
+        countupVal = setInterval(countup, 1000);
+
+        display();
+
+
+        async function display() {
+            var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
+            var objects = await osql.connect(sql);
+
+            var role = objects[0]['role'];
+            console.log(objects[0]['role']);
+            sessionStorage.setItem('role', role);
+            document.getElementById('role').innerHTML = role;
+            //インサイダーとゲームマスターにだけお題
+            if (role == "インサイダー" || role == "ゲームマスター") {
+                displayTheme();
+            }
+        }
+
+
+
+        async function displayTheme() {
+
+            var sql = `select * from Themes inner join Rooms on Themes.id = Rooms.themenum and Rooms.id = "${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+
+            document.getElementById('theme').innerHTML = `お題は<span id="theme2">　${objects[0]['theme']}　</span>です`;
+        }
+
+
+
+    </script>
+</body>
+
+</html>
