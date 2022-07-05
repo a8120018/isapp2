@@ -12,15 +12,21 @@
     <link rel="stylesheet" href="index.css">
 
     <script>
-        ///osql.requireLogin();
+        osql.requireLogin();
 
-        function buttonPressed() {
+        async function buttonPressed() {
             var uid = document.getElementById("uid").value
             var fname = document.getElementById("fname").value
             var lname = document.getElementById("lname").value
             console.log(uid)
             console.log(fname)
             console.log(lname)
+
+            var sql = `insert into TestUsers values('${uid}', '${fname}', '${lname}')`;
+            var objects = await osql.connect(sql);
+            sessionStorage.setItem('userid', uid);
+            sessionStorage.setItem('username', lname + ' ' + fname);
+            location.href = 'enterroom.html';
 
         }
 
@@ -34,9 +40,9 @@
     <p>id</p>
     <input type="text" id="uid">
     <p>姓</p>
-    <input type="text" id=fname>
-    <p>名</p>
     <input type="text" id=lname>
+    <p>名</p>
+    <input type="text" id=fname>
 
     <p class="center1"><button onclick="buttonPressed()" class="button">始める</button></p>
 </body>
