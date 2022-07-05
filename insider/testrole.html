@@ -37,7 +37,7 @@
         document.getElementById("timer").innerHTML = 15;
 
         let countupVal, updateVal;
-        let count = 15;
+        let count = 180;
         let countup = function () {
             count = count - 1;
             document.getElementById("timer").innerHTML = count;
@@ -54,6 +54,7 @@
         async function display() {
             var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
             var objects = await osql.connect(sql);
+            console.log(objects)
 
             var role = objects[0]['role'];
             console.log(objects[0]['role']);
