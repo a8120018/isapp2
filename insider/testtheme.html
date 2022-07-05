@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+
+</head>
+
+<body>
+    <p class="title">インサイダーゲーム</p>
+    <div id="hide">
+        <span id="signup">お題を入力してください</span>
+        <br>
+        <input type="text" id="guess">
+        <input type="button" id="submit" value="OK">
+    </div>
+    <div id="display">
+    </div>
+
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        var userid = sessionStorage.getItem('userid');
+
+        document.getElementById('submit').addEventListener('click', async function submit() {
+            var answer = document.getElementById('guess').value;
+            var sql3 = `update Points set guesstheme = '${answer}' where userid = "${userid}" and roomid = "${room}";`;
+            var objects3 = await osql.connect(sql3);
+
+            //画面遷移
+            document.getElementById('hide').style.display = "none";
+            document.getElementById('display').innerHTML = "<p>他の人の回答と、正誤判定を待っています<p>";
+            countupVal = setInterval(countup, 1000);
+        });
+
+        //1秒ごとにgoの状態を取得
+        let countupVal, updateVal;
+        let count = 0;
+        let countup = async function () {
+            count = count + 1;
+            console.log(count)
+
+            //画面遷移がOKになってたら画面遷移する
+            var sql2 = `select go from Rooms where id="${room}";`;
+            var objects2 = await osql.connect(sql2);
+            console.log(objects2);
+            if (objects2[0]['go'] == "OK") {
+                location.href = 'testvote.html';
+            }
+            location.href = 'testvote.html';/////////デバッグ用
+        }
+
+
+
+    </script>
+</body>
+
+</html>
