@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+
+</head>
+
+<body>
+    <p class="title">インサイダーゲーム</p>
+    <p class="member">ルーム：
+        <span id="room"></span>
+    </p>
+    <p class="member">参加者：
+    <div id="table1"></div>
+    <div id="button"></div>
+
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+
+        var room = sessionStorage.getItem('room');
+        console.log(room)
+        document.getElementById('room').innerHTML = room;
+        //ルーム作成者か
+        var leader = sessionStorage.getItem('leader');
+        var username = sessionStorage.getItem('username')
+        var userid = sessionStorage.getItem('userid')
+        sessionStorage.setItem('userid', userid);
+        sessionStorage.setItem('username', username);
+
+        if (leader == 'yes') {
+            document.getElementById('button').innerHTML = '<input type="button" id="start" value="始める">';
+        }
+        //1秒ごとにメンバー取得
+        let countupVal, updateVal;
+        let count = 0;
+        let countup = async function () {
+            count = count + 1;
+            console.log(count)
+            var html = '<table id="table1"><tr>';
+
+            var sql = `select * from TestUsers inner join Points on TestUsers.id = Points.userid and Points.roomid ="${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+
+            var member = [];
+            for (var i = 0; i < objects.length; i++) {
+                member.push(objects[i]['id']);//あってるかわかんない
+                html = html + `<td>${objects[i]['lname']} ${objects[i]['fname']}</td>`;
+            }
+            document.getElementById('table1').innerHTML = html;
+
+            //画面遷移がOKになってたら画面遷移する
+            var sql2 = `select start from Rooms where id="${room}";`;
+            var objects2 = await osql.connect(sql2);
+            console.log(objects2);
+            if (objects2[0]['start'] == "OK") {
+                location.href = 'role.html';
+            }
+
+        }
+
+        countupVal = setInterval(countup, 1000);
+
+        document.getElementById('start').addEventListener('click', async function startGame() {
+            var sql = `select * from TestUsers inner join Points on TestUsers.id = Points.userid and Points.roomid ="${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+
+            var member = [];
+            for (var i = 0; i < objects.length; i++) {
+                member.push(objects[i]['id']);//あってるかわかんない
+            }
+            //ルーム受付中を受付終了に更新
+            var sql = `update Rooms set state = "受付終了" where id="${room}"`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            //役割決め
+            //配列シャッフル関数
+            const shuffle = ([...array]) => {
+                for (let i = array.length - 1; i >= 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            //
+            const array = ['インサイダー', 'ゲームマスター']
+            //人数を取ってくる
+            var sql = `select roomnum from Rooms where id="${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            //n-2人分の庶民を配列に追加
+            for (var i = 0; i < Number(objects[0]['roomnum']) - 2; i++) {
+                array.push("庶民")
+                console.log(array)
+            }
+            var num = objects[0]['roomnum']
+            //配列が完成　シャッフルする
+            shuffle(array);
+            //メンバーと、役割の配列　インデックスが同じのを役割とする
+            for (var i = 0; i < num + 1; i++) {
+                //member[i]
+                var sql = `update Points set role = "${array[i]}" where roomid="${room}" and userid="${member[i]}"`;
+                var objects = await osql.connect(sql);
+            }
+
+            //お題決め
+            var max = 100;
+            var random = Math.floor(Math.random() * (max + 1));
+            console.log(random)
+            var sql = `update Rooms set themenum = "${random}",start = "OK" where id="${room}"`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            //画面遷移更新
+            //画面遷移
+            //location.href = 'role.html';
+        })
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
