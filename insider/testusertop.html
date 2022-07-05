@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+
+    <link rel="stylesheet" href="index.css">
+
+    <script>
+        ///osql.requireLogin();
+
+        function buttonPressed() {
+            var uid = document.getElementById("uid").value
+            var fname = document.getElementById("fname").value
+            var lname = document.getElementById("lname").value
+            console.log(uid)
+            console.log(fname)
+            console.log(lname)
+
+        }
+
+
+
+    </script>
+</head>
+
+<body class="color">
+    <p class="title">インサイ<span class="red">ダーゲ</span>ーム</p>
+    <p>id</p>
+    <input type="text" id="uid">
+    <p>姓</p>
+    <input type="text" id=fname>
+    <p>名</p>
+    <input type="text" id=lname>
+
+    <p class="center1"><button onclick="buttonPressed()" class="button">始める</button></p>
+</body>
+
+</html>
