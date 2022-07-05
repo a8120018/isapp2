@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+
+
+</head>
+
+<body>
+    <p class="title">インサイダーゲーム</p>
+    <p>インサイダーは<span id="insider"></span>さんでした</p>
+    <p>あなたの合計
+        <span id="point"></span>pt
+    </p>
+    <p>ランキング</p>
+    <div id="table4"></div>
+    <!--
+            <tr><td>順位</td><td>プレイヤー</td><td>１００pt</td></tr> 
+        -->
+    <input type="button" onclick="pressed()" value="終わる">
+    <script>
+        osql.requireLogin();
+        var room = sessionStorage.getItem('room');
+        var userid = sessionStorage.getItem('userid');
+        display();
+
+        function pressed() {
+            location.href = 'testenterroom.html'
+        }
+
+        async function display() {
+            var sql = `select * from TestUsers inner join Points on TestUsers.id = Points.userid and roomid="${room}" and role="インサイダー";`; //インサイダーの人のuserid取得
+            var objects = await osql.connect(sql);
+
+            document.getElementById('insider').innerHTML = objects[0]['lname'] + ' ' + objects[0]['fname'];
+            //順位表
+            var sql = `select id, lname, fname, point1 + point2 as sum from TestUsers inner join Points on TestUsers.id = Points.userid and roomid="${room}" order by point1+point2 desc;`; //インサイダーの人のuserid取得
+            var objects = await osql.connect(sql);
+
+            var html = '<table id="ranking">'
+            for (var i = 0; i < objects.length; i++) {
+                html = html + `<tr><td>${i + 1}位</td><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}さん</td><td>${objects[i]['sum']}pt</td></tr>`;
+                if (objects[i]['id'] == userid) {
+                    var point = objects[i]['sum']
+
+                }
+            }
+            document.getElementById('table4').innerHTML = html;
+            document.getElementById('point').innerHTML = point;
+        }
+
+        let countupVal, updateVal;
+        let countup = async function () {
+            var sql = `select lname, fname, point1 + point2 as sum from TestUsers inner join Points on TestUsers.id = Points.userid and roomid="${room}" order by point1+point2 desc;`; //インサイダーの人のuserid取得
+            var objects = await osql.connect(sql);
+            var html = '<table id="ranking">'
+
+            for (var i = 0; i < objects.length; i++) {
+                html = html + `<tr><td>${i + 1}位</td><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}さん</td><td>${objects[i]['sum']}pt</td></tr>`
+            }
+            document.getElementById('table4').innerHTML = html;
+        }
+
+        countupVal = setInterval(countup, 1000);
+    </script>
+</body>
+
+</html>
