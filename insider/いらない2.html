@@ -1,1 +1,40 @@
-いらない
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+    <script>
+        const shuffle = ([...array]) => {
+            for (let i = array.length - 1; i >= 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        //
+        const array = ['インサイダー', 'ゲームマスター']
+        //人数を取ってくる
+
+        //n-2人分の庶民を配列に追加
+        for (var i = 0; i < 4 - 2; i++) {
+            array.push("庶民")
+            console.log(array)
+        }
+        //配列が完成　シャッフルする
+        shuffle(array);
+        console.log(array)
+
+        newArray = shuffle(array)
+        console.log(newArray)
+    </script>
+
+</head>
+
+<body>
+    <p>シャッフル試し</p>
+
+</body>
+
+</html>
