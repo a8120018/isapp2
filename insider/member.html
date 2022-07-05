@@ -105,11 +105,11 @@
             }
             var num = objects[0]['roomnum']
             //配列が完成　シャッフルする
-            shuffle(array);
+            var shufflearray = shuffle(array);
             //メンバーと、役割の配列　インデックスが同じのを役割とする
             for (var i = 0; i < num + 1; i++) {
                 //member[i]
-                var sql = `update Points set role = "${array[i]}" where roomid="${room}" and userid="${member[i]}"`;
+                var sql = `update Points set role = "${shufflearray[i]}" where roomid="${room}" and userid="${member[i]}"`;
                 var objects = await osql.connect(sql);
             }
 
