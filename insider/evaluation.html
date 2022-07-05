@@ -16,6 +16,9 @@
         var room = sessionStorage.getItem('room');
         displayTheme()
 
+        setInterval(evaluation, 2000);
+
+
 
         async function displayTheme() {
             var sql = `select theme from Rooms where id="${room}";`;
@@ -30,18 +33,25 @@
             document.getElementById('theme2').innerHTML = objects[0]['theme'];
         }
 
+        async function evaluation() {
+            var html = '<table id="table4">'
 
-        var html = '<table id="table4">'
+            var sql2 = `select theme from Guesses where room="${room}";`;
+            var objects2 = await osql.connect(sql2);
 
-        var sql2 = `select theme from Guesses where room="${room}";`;
-        var objects2 = await osql.connect(sql2);
+            for (var i = 0; i < objects.length; i++) {
 
-        for (var i = 0; i < objects.length; i++) {
+                var answer = objects2[i]['theme']
+                html = html + `<tr><td>${answer}</td><td><input type="radio" value="100" name="radio${i}"><input type="radio" value="80" name="radio${i}"><input type="radio" value="60" name="radio${i}"><input type="radio" value="40" name="radio${i}"><input type="radio" value="20" name="radio${i}"><input type="radio" value="0" name="radio${i}">/td>`
+            }
+            document.getElementById('table').innerHTML = html;
 
-            var answer = objects2[i]['theme']
-            html = html + `<tr><td>${answer}</td><td><input type="radio" value="100" name="radio${i}"><input type="radio" value="80" name="radio${i}"><input type="radio" value="60" name="radio${i}"><input type="radio" value="40" name="radio${i}"><input type="radio" value="20" name="radio${i}"><input type="radio" value="0" name="radio${i}">/td>`
         }
-        document.getElementById('table').innerHTML = html;
+
+
+
+
+
 
     </script>
 </head>
