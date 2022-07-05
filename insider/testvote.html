@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+
+</head>
+
+<body>
+    <p class="title">インサイダーゲーム</p>
+    <h2>インサイダー投票</h2>
+    <p>お題は<span id="theme3"></span>でした
+    </p>
+
+    <p>インサイダーだと思う人を選んでください</p>
+    <div id="table"></div>
+
+
+
+
+    <script>
+        osql.requireLogin();
+
+        var room = sessionStorage.getItem('room');
+        var userid = sessionStorage.getItem('userid');
+        display();
+
+
+        async function display() {
+            var sql = `select * from Themes inner join Rooms on Themes.id = Rooms.themenum and Rooms.id = "${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+            document.getElementById('theme3').innerHTML = `${objects[0]['theme']}`;
+        }
+
+        insiderSelect();
+
+        async function insiderSelect() {
+            var html = '<table id="table3">';
+            // メンバーの名前が入った配列か何か作って、そこからインデクス指定して、投票者のところにメンバー名出すようにしたい　あとですすめる
+            var sql = `select * from TestUsers inner join Points on TestUsers.id = Points.userid and Points.roomid ="${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects)
+
+            for (let i = 0; i < objects.length; i++) { // ルーム数絞って出てきた人の名前の数繰り返したい　多分object.lentghじゃない
+                if (objects[i]['userid'] !== userid) {
+                    html = html + `<tr><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}<br>回答：${objects[i]['guesstheme']}</td><td><input type="button" value="投票" id="${objects[i]['id']}" onclick="buttonPressed(this)" class="button"></td></tr>`
+                }
+            }
+            document.getElementById('table').innerHTML = html;
+
+        }
+
+        async function buttonPressed(obj) {
+            var user = obj.id; // a8120125@gsuite.si..... 選択したインサイダーのID
+            var sql = `select * from TestUsers inner join Points on TestUsers.id = Points.userid and Points.roomid ="${room}" and Points.userid="${user}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects)
+
+            if (window.confirm(`${objects[0]['lname'] + ' ' + objects[0]['fname']}さんに投票でよろしいですか？`)) {
+                // OKが選択された時の処理
+                var sql = `update Points set selectinsider = "${user}" where roomid ="${room}" and userid="${userid}";`;
+                var objects = await osql.connect(sql);
+                console.log(objects)
+                location.href = 'result.html'
+            }
+
+
+
+        }
+
+    </script>
+</body>
+
+</html>
