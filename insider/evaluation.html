@@ -42,7 +42,11 @@
             for (var i = 0; i < objects.length; i++) {
 
                 var answer = objects2[i]['theme']
+                if (answer == "null") {
+                    ;
+                } else {
                 html = html + `<tr><td>${answer}</td><td><input type="radio" value="100" name="radio${i}"><input type="radio" value="80" name="radio${i}"><input type="radio" value="60" name="radio${i}"><input type="radio" value="40" name="radio${i}"><input type="radio" value="20" name="radio${i}"><input type="radio" value="0" name="radio${i}">/td>`
+                }
             }
             document.getElementById('table').innerHTML = html;
 
