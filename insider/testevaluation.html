@@ -10,11 +10,33 @@
     <script type="text/javascript" src="lib/osql.js"></script>
     <script type="text/javascript" src="settings.js"></script>
 
+
+</head>
+
+<body>
+    <p class="title">インサイダーゲーム</p>
+    <p>お題は
+        <span id="theme2"></span>です
+    </p>
+    <p>各回答の正誤判定をしてください</p>
+    <div id="table"></div>
+    <input type="button" id="submit" value="決定" onclick="decide()">
+    <input type="button" id="test" value="テスト" onclick="test()">
+
+
     <script>
         osql.requireLogin();
         //ルーム番号を表示
         var room = sessionStorage.getItem('room');
         displayTheme()
+
+        target = document.getElementById("submit")
+        target.style.display = "none"
+
+        async function test() {
+            target.style.display = "block"
+        }
+
 
 
 
@@ -84,16 +106,6 @@
         }
 
     </script>
-</head>
-
-<body>
-    <p class="title">インサイダーゲーム</p>
-    <p>お題は
-        <span id="theme2"></span>です
-    </p>
-    <p>各回答の正誤判定をしてください</p>
-    <div id="table"></div>
-    <input type="button" id="submit" value="決定" onclick="decide()">
 </body>
 
 </html>
