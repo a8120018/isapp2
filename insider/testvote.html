@@ -21,6 +21,7 @@
 
     <p>インサイダーだと思う人を選んでください</p>
     <div id="table"></div>
+    <p id="check"></p>
 
 
 
@@ -69,12 +70,37 @@
                 var sql = `update Points set selectinsider = "${user}" where roomid ="${room}" and userid="${userid}";`;
                 var objects = await osql.connect(sql);
                 console.log(objects)
-                location.href = 'testresult.html'
+                console.log("投票済み")
+                document.getElementById("check").innerHTML = "投票済みです。全員の投票が終わるまでお待ちください。"
+
             }
 
 
 
         }
+
+        let updateval;
+
+        let update = async function () {
+            var numsql = `select roomnum from Rooms where id="${room}";`;
+            var numobjects = await osql.connect(numsql);
+            console.log(numobjects)
+            var peoplenum = numobjects[0]['roomnum'] // ルームの人数取得　今回はsql書いたけどsessionstorageでも行けると思う
+            var getsql = `select * from Points where roomid = ${room} and selectinsider != "null";`;// インサイダー投票した人
+            var getobjects = await osql.connect(getsql);
+            console.log(getobjects);
+            console.log(getobjects.length); //インサイダー投票した人の人数
+
+
+
+            if (getobjects.length >= peoplenum) {
+                location.href = 'testresult.html'
+
+            }
+
+        }
+
+        updateVal = setInterval(update, 1000);
 
     </script>
 </body>
