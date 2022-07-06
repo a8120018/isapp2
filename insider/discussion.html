@@ -27,7 +27,6 @@
     <p>話し合いの時間<br>ゲームマスターに1人ずつ質問してください
     <p>残り時間
         <span id="timer2"></span>
-        <button onclick="buttonPlusPressed()" class="button">1分追加</button>
     </p>
 
 
@@ -39,34 +38,43 @@
         document.getElementById('roomnum').innerHTML = room;
         var userid = sessionStorage.getItem('userid');
         document.getElementById("timer2").innerHTML = `1 : 10`;
-
+        display();
         let countupVal, updateVal;
         let count = 70;
-        async function buttonPlusPressed() {
-            count = count + 60;
-        }
+        
 
-        let countup = function () {
-            count = count - 1;
-            var second = count % 60
-            var minute = Math.floor(count / 60)
-            if (second < 10) {
-                document.getElementById("timer2").innerHTML = `${minute} : 0${second}`;
+
+
+        let countup = async function () {
+                count = count - 1;
+                var second = count % 60
+                var minute = Math.floor(count / 60)
+                var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
+                var objects = await osql.connect(sql);
+
+                var role = objects[0]['role'];
+                if (second < 10) {
+                    document.getElementById("timer2").innerHTML = `${minute} : 0${second}`;
+                }
+                else {
+                    document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
+                }
+
+                if (count == 0) {
+
+                    if (role == "ゲームマスター") {
+                        location.href = 'testevaluation.html';
+                    } else {
+                        //画面遷移
+                        location.href = 'testtheme.html';
+                    }
+                }
             }
-            else {
-                document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
-            }
-
-            if (count == 0) {
-                //画面遷移
-                location.href = 'theme.html';
-            }
-        }
-        countupVal = setInterval(countup, 1000);
-
-        display();
+            countupVal = setInterval(countup, 1000);
+        
 
 
+            
         async function display() {
             var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
             var objects = await osql.connect(sql);
