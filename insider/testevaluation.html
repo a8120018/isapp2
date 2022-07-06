@@ -51,7 +51,13 @@
                 for (var i = 0; i < objects2.length; i++) {
 
                     var answer = objects2[i]['guesstheme']
-                    html = html + `<tr><td>${answer}</td><td><input type="radio" id="a${i}" value="100" name="${objects2[i]['userid']}"><label for="a${i}">○</label><input type="radio" value="0" id="b${i}" name="${objects2[i]['userid']}"><label for="b${i}">×</label></td></tr>`
+                    if (answer=="null"){
+                        ;
+                    }else{
+                        html = html + `<tr><td>${answer}</td><td><input type="radio" id="a${i}" value="100" name="${objects2[i]['userid']}"><label for="a${i}">○</label><input type="radio" value="0" id="b${i}" name="${objects2[i]['userid']}"><label for="b${i}">×</label></td></tr>`
+                        
+                    }
+                    
                 }
                 document.getElementById('table').innerHTML = html;
 
