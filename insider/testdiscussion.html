@@ -27,7 +27,6 @@
     <p>話し合いの時間<br>ゲームマスターに1人ずつ質問してください
     <p>残り時間
         <span id="timer2"></span>
-        <button onclick="buttonPlusPressed()" class="button">1分追加</button>
     </p>
 
 
@@ -41,13 +40,10 @@
         document.getElementById("timer2").innerHTML = `1 : 10`;
         display();
         let countupVal, updateVal;
-        let count = 70;
-        async function buttonPlusPressed() {
-            count = count + 60;
+        let count = 15;
 
-        }
 
-        
+
 
         let countup = async function () {
             count = count - 1;
