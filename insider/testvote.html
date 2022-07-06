@@ -79,6 +79,8 @@
 
         }
 
+        //1秒ごとに投票済みの人数とってくる
+
         let updateval;
 
         let update = async function () {
@@ -93,7 +95,7 @@
 
 
 
-            if (getobjects.length >= peoplenum) {
+            if (getobjects.length >= peoplenum) { // 全員投票したら一斉にresultに遷移
                 location.href = 'testresult.html'
 
             }
