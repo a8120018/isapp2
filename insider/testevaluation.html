@@ -93,6 +93,9 @@
 
 
         async function decide() {
+
+            var sql1 = `select roomnum from Rooms where id="${room}";`;
+            var objects1 = await osql.connect(sql1);
             //全部入力されていたら実行うするif文入れる
             var sql2 = `update Rooms set go = "OK" where id="${room}";`;
             var objects2 = await osql.connect(sql2);
@@ -101,10 +104,26 @@
             //   var sql2 = `update Points set where roomid="${room}";`;
             // var objects2 = await osql.connect(sql2);
 
-
-            //}
-            location.href = "testvote.html";
-
+            var sql2 = `select * from Points where roomid="${room}";`;
+            var objects2 = await osql.connect(sql2);
+            console.log(objects2)
+            for (var j = 0; j < objects1[0]['roomnum'] - 1; j++) {
+                if (objects2[j]['role'] !== "ゲームマスター") {
+                    var element = document.getElementsByClassName(`${objects2[j]['userid']}`);
+                    console.log(element)
+                    var radio = "";
+                    for (var i = 0; i < element.length; i++) {
+                        if (element[i].checked) {
+                            radio = element[i].value; // radioは100か0が入ってる
+                            console.log(radio)
+                        }
+                    }
+                    var sql2 = `update Points set point2 = ${radio} where userid="${objects2[j]['userid']}" and roomid="${room}";`;
+                    var objects2 = await osql.connect(sql2);
+                }
+                //}
+                //location.href = "testvote.html";
+            }
         }
 
     </script>
