@@ -114,7 +114,7 @@
             }
 
             //お題決め
-            var max = 100;
+            var max = 79;
             var random = Math.floor(Math.random() * (max + 1));
             console.log(random)
             var sql = `update Rooms set themenum = "${random}",start = "OK" where id="${room}"`;
