@@ -21,6 +21,7 @@
 
     <p>インサイダーだと思う人を選んでください</p>
     <div id="table"></div>
+    <p id="check"></p>
 
 
 
@@ -50,7 +51,7 @@
             console.log(objects)
 
             for (let i = 0; i < objects.length; i++) { // ルーム数絞って出てきた人の名前の数繰り返したい　多分object.lentghじゃない
-                if (objects[i]['userid'] !== userid) {
+                if (objects[i]['userid'] !== userid && objects[i]['role'] !== "ゲームマスター") {
                     html = html + `<tr><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}<br>回答：${objects[i]['guesstheme']}</td><td class="none1"><input type="button" value="投票" id="${objects[i]['id']}" onclick="buttonPressed(this)" class="button"></td></tr>`
                 }
             }
@@ -64,19 +65,27 @@
             var sql = `select * from Users inner join Points on Users.id = Points.userid and Points.roomid ="${room}" and Points.userid="${user}";`;
             var objects = await osql.connect(sql);
             console.log(objects)
+
             if (window.confirm(`${objects[0]['lname'] + ' ' + objects[0]['fname']}さんに投票でよろしいですか？`)) {
                 // OKが選択された時の処理
                 var sql = `update Points set selectinsider = "${user}" where roomid ="${room}" and userid="${userid}";`;
                 var objects = await osql.connect(sql);
-                console.log(objects);
+                console.log(objects)
                 console.log("投票済み")
                 document.getElementById("check").innerHTML = "投票済みです。全員の投票が終わるまでお待ちください。"
-                
+
+
+
+
+
+
+
+
+
+
+
+
             }
-
-
-
-
 
 
 
@@ -84,85 +93,84 @@
 
         //1秒ごとに投票済みの人数とってくる
 
-            let updateval;
+        let updateval;
 
-            let update = async function () {
-                var user = sessionStorage.getItem('user')
+        let update = async function () {
+            var user = sessionStorage.getItem('user')
 
-                var numsql = `select roomnum from Rooms where id="${room}";`;// ルームの人数
-                var numobjects = await osql.connect(numsql);
-                console.log(numobjects)
-                var peoplenum = numobjects[0]['roomnum'] // ルームの人数取得　今回はsql書いたけどsessionstorageでも行けると思う
-                var getsql = `select * from Points where roomid = ${room} and selectinsider != "null";`;// インサイダー投票した人
-                var getobjects = await osql.connect(getsql);
-                console.log(getobjects);
-                console.log(getobjects.length); //インサイダー投票した人の人数
-
-
-
-                if (getobjects.length >= peoplenum) { // 全員投票したら一斉にresultに遷移
+            var numsql = `select roomnum from Rooms where id="${room}";`;// ルームの人数
+            var numobjects = await osql.connect(numsql);
+            console.log(numobjects)
+            var peoplenum = numobjects[0]['roomnum'] // ルームの人数取得　今回はsql書いたけどsessionstorageでも行けると思う
+            var getsql = `select * from Points where roomid = ${room} and selectinsider != "null";`;// インサイダー投票した人
+            var getobjects = await osql.connect(getsql);
+            console.log(getobjects);
+            console.log(getobjects.length); //インサイダー投票した人の人数
 
 
 
-                    var sqlinsider = `select * from Points where roomid ="${room}" and role = "インサイダー" ` // ルーム内のインサイダー取得
-                    var objectsinsider = await osql.connect(sqlinsider);
-                    var insider = objectsinsider[0]['userid']
-                    console.log(insider)
-
-                    var numinsidersql = `select * from Points where roomid ="${room}" and selectinsider = "${insider}" `; //インサイダー正解者の人数
-                    var numinsiderobjects = await osql.connect(numinsidersql);
-                    var numinsider = numinsiderobjects.length
-                    console.log(numinsider)
-
-                    var sqlrole = `select * from Points where userid = "${userid}" and roomid ="${room}"` // 自分の役割取得
-                    var objectsrole = await osql.connect(sqlrole);
-                    var myrole = objectsrole[0]['role']
-
-                    if (myrole == "庶民") {
-                        if (user == insider) {
-                            var p2sql = `update Points set point2 = 100 where roomid ="${room}" and userid="${userid}";`;
-                            var objectsinsider = await osql.connect(p2sql);
-                        }
-                        else {
-                            var p2sql = `update Points set point2 = 0 where roomid ="${room}" and userid="${userid}";`;
-                            var objectsinsider = await osql.connect(p2sql);
-                        }
+            if (getobjects.length >= peoplenum) { // 全員投票したら一斉にresultに遷移
 
 
-                    }
 
-                    if (myrole == "ゲームマスター") {
-                        if (user == insider) {
-                            var p2sql = `update Points set point2 = 200 where roomid ="${room}" and userid="${userid}";`;
-                            var objectsinsider = await osql.connect(p2sql);
-                        }
-                        else {
-                            var p2sql = `update Points set point2 = 0 where roomid ="${room}" and userid="${userid}";`;
-                            var objectsinsider = await osql.connect(p2sql);
-                        }
+                var sqlinsider = `select * from Points where roomid ="${room}" and role = "インサイダー" ` // ルーム内のインサイダー取得
+                var objectsinsider = await osql.connect(sqlinsider);
+                var insider = objectsinsider[0]['userid']
+                console.log(insider)
 
+                var numinsidersql = `select * from Points where roomid ="${room}" and selectinsider = "${insider}" `; //インサイダー正解者の人数
+                var numinsiderobjects = await osql.connect(numinsidersql);
+                var numinsider = numinsiderobjects.length
+                console.log(numinsider)
 
-                    }
+                var sqlrole = `select * from Points where userid = "${userid}" and roomid ="${room}"` // 自分の役割取得
+                var objectsrole = await osql.connect(sqlrole);
+                var myrole = objectsrole[0]['role']
 
-                    if (myrole == "インサイダー") {
-                        var inspoint = Math.floor(150 / peoplenum * numinsider);
-                        var p2sql = `update Points set point2 = ${inspoint} where roomid ="${room}" and userid="${userid}";`;
+                if (myrole == "庶民") {
+                    if (user == insider) {
+                        var p2sql = `update Points set point2 = 100 where roomid ="${room}" and userid="${userid}";`;
                         var objectsinsider = await osql.connect(p2sql);
-
+                    }
+                    else {
+                        var p2sql = `update Points set point2 = 0 where roomid ="${room}" and userid="${userid}";`;
+                        var objectsinsider = await osql.connect(p2sql);
                     }
 
-
-
-
-
-                    location.href = 'testresult.html'
 
                 }
 
+                if (myrole == "ゲームマスター") {
+                    if (user == insider) {
+                        var p2sql = `update Points set point2 = 200 where roomid ="${room}" and userid="${userid}";`;
+                        var objectsinsider = await osql.connect(p2sql);
+                    }
+                    else {
+                        var p2sql = `update Points set point2 = 0 where roomid ="${room}" and userid="${userid}";`;
+                        var objectsinsider = await osql.connect(p2sql);
+                    }
+
+
+                }
+
+                if (myrole == "インサイダー") {
+                    var inspoint = Math.floor(150 / peoplenum * numinsider);
+                    var p2sql = `update Points set point2 = ${inspoint} where roomid ="${room}" and userid="${userid}";`;
+                    var objectsinsider = await osql.connect(p2sql);
+
+                }
+
+
+
+
+
+                location.href = 'result.html'
+
             }
 
-            updateVal = setInterval(update, 1000);
+        }
 
+        updateVal = setInterval(update, 1000);
 
     </script>
 </body>
