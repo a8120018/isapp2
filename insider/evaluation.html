@@ -10,54 +10,7 @@
     <script type="text/javascript" src="lib/osql.js"></script>
     <script type="text/javascript" src="settings.js"></script>
 
-    <script>
-        osql.requireLogin();
-        //ルーム番号を表示
-        var room = sessionStorage.getItem('room');
-        displayTheme()
 
-        setInterval(evaluation, 2000);
-
-
-
-        async function displayTheme() {
-            var sql = `select theme from Rooms where id="${room}";`;
-            var objects = await osql.connect(sql);
-            console.log(objects);
-            var themeNum = objects[0]['theme']
-
-            var sql = `select theme from Themes where num="${themeNum}";`;
-            var objects = await osql.connect(sql);
-            console.log(objects[0]['theme']);
-
-            document.getElementById('theme2').innerHTML = objects[0]['theme'];
-        }
-
-        async function evaluation() {
-            var html = '<table id="table4">'
-
-            var sql2 = `select theme from Guesses where room="${room}";`;
-            var objects2 = await osql.connect(sql2);
-
-            for (var i = 0; i < objects.length; i++) {
-
-                var answer = objects2[i]['theme']
-                if (answer == "null") {
-                    ;
-                } else {
-                html = html + `<tr><td>${answer}</td><td><input type="radio" value="100" name="radio${i}"><input type="radio" value="80" name="radio${i}"><input type="radio" value="60" name="radio${i}"><input type="radio" value="40" name="radio${i}"><input type="radio" value="20" name="radio${i}"><input type="radio" value="0" name="radio${i}">/td>`
-                }
-            }
-            document.getElementById('table').innerHTML = html;
-
-        }
-
-
-
-
-
-
-    </script>
 </head>
 
 <body>
@@ -65,8 +18,123 @@
     <p>お題は
         <span id="theme2"></span>です
     </p>
-    <p>各解答に点数をつけてください</p>
+    <p>各回答の正誤判定をしてください</p>
     <div id="table"></div>
+    <input type="button" id="submit" value="決定" onclick="decide()">
+    <!--<input type="button" id="test" value="テスト" onclick="test()">-->
+
+
+    <script>
+        osql.requireLogin();
+        //ルーム番号を表示
+        var room = sessionStorage.getItem('room');
+        displayTheme()
+
+        let target = document.getElementById("submit")
+        target.style.display = "none"
+
+        /*async function test() {
+            target.style.display = "block"
+        }*/
+
+
+
+
+
+        async function displayTheme() {
+
+            var sql = `select * from Themes inner join Rooms on Themes.id = Rooms.themenum and Rooms.id = "${room}";`;
+            var objects = await osql.connect(sql);
+            console.log(objects[0]);
+
+            document.getElementById('theme2').innerHTML = `<span id="theme2">　${objects[0]['theme']}　</span>`;
+        }
+
+
+
+        let countup = async function () {
+            var sql1 = `select roomnum from Rooms where id="${room}";`;
+            var objects1 = await osql.connect(sql1);
+
+            var sql3 = `select guesstheme from Points where roomid="${room}";`;
+            var objects3 = await osql.connect(sql3);
+            var t = 0;
+            for (var i = 0; i < objects3.length; i++) {
+                if (objects3[i]['guesstheme'] !== "null") {
+                    t = t + 1;
+                }
+            }
+            if (t == objects1[0]['roomnum'] - 1) {
+
+                target.style.display = "block"
+
+                var html = '<table id="table4">'
+                var sql2 = `select * from Points where roomid="${room}";`;
+                var objects2 = await osql.connect(sql2);
+
+                for (var i = 0; i < objects2.length; i++) {
+
+                    var answer = objects2[i]['guesstheme']
+                    if (answer == "null") {
+                        ;
+                    } else {
+                        html = html + `<tr><td>${answer}</td><td class="none"><input type="radio" id="a${i}" value="100" name="${objects2[i]['userid']}"><label for="a${i}">○</label><input type="radio" value="0" id="b${i}" name="${objects2[i]['userid']}" checked ><label for="b${i}">×</label></td></tr>`
+
+                    }
+
+                }
+                document.getElementById('table').innerHTML = html;
+
+                clearInterval(countupVal);
+            }
+        }
+
+        countupVal = setInterval(countup, 1000);
+
+
+        async function decide() {
+
+            var sql1 = `select roomnum from Rooms where id="${room}";`;
+            var objects1 = await osql.connect(sql1);
+
+            var sql2 = `update Rooms set go = "OK" where id="${room}";`;
+            var objects2 = await osql.connect(sql2);
+            //ここ分かりません　それぞれのラジオボタンに対応する点をデータベースに入れる　Points
+            // for (vari = 0; i < ; i++) {
+            //   var sql2 = `update Points set where roomid="${room}";`;
+            // var objects2 = await osql.connect(sql2);
+
+            var sql2 = `select * from Points where roomid="${room}";`;
+            var objects2 = await osql.connect(sql2);
+            console.log(objects2)
+            console.log(objects1[0]['roomnum'] - 1)
+            for (var j = 0; j < objects1[0]['roomnum']; j++) {
+                if (objects2[j]['role'] !== "ゲームマスター") {
+                    var element = document.getElementsByName(`${objects2[j]['userid']}`);
+                    console.log(element[j])
+
+                    var radio = "";
+                    for (var i = 0; i < element.length; i++) {
+                        console.log("a")
+                        if (element[i].checked) {
+                            radio = element[i].value; // radioは100か0が入ってる
+                            console.log(radio)
+                            if (objects2[j]['role'] == "インサイダー" && radio == 100) {
+                                var sql3 = `update Points set point1 = 50 where userid="${objects2[j]['userid']}" and roomid="${room}";`;
+                            } else {
+                                var sql3 = `update Points set point1 = ${radio} where userid="${objects2[j]['userid']}" and roomid="${room}";`;
+                            }
+                            var objects3 = await osql.connect(sql3);
+                        }
+                    }
+
+                }
+                //}
+                location.href = "vote.html";
+            }
+        }
+
+    </script>
 </body>
 
 </html>
