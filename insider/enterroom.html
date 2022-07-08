@@ -50,7 +50,10 @@
             var n1 = array[Math.floor(Math.random() * array.length)];
             var n2 = array[Math.floor(Math.random() * array.length)];
             var n3 = array[Math.floor(Math.random() * array.length)];
-            var room = n1 + n2 + n3 + n1 + n2 + n3;
+            var n4 = array[Math.floor(Math.random() * array.length)];
+            var n5 = array[Math.floor(Math.random() * array.length)];
+            var n6 = array[Math.floor(Math.random() * array.length)];
+            var room = n1 + n2 + n3 + n4 + n5 + n6;
             console.log(room)
             //データベース登録
             var sql = `insert into Rooms (id, roomnum, state, themenum, start, go) values("${room}", "1", "受付中", "0", "null", "null");`;
