@@ -72,6 +72,7 @@
                 var objects = await osql.connect(sql);
                 console.log(objects)
                 console.log("投票済み")
+                document.getElementById("table").style.display = "none"
                 document.getElementById("check").innerHTML = "投票済みです。全員の投票が終わるまでお待ちください。"
 
 
