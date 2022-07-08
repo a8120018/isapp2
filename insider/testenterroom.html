@@ -55,14 +55,14 @@
             var roomlist = [];
             var sql = `select id from Rooms;`;
             var objects = await osql.connect(sql);
-            console.log(objects);
+
             //ルーム番号のリストを作成
             for (var i = 0; i < objects.length; i++) {
                 roomlist.push(objects[i]['id'])
             }
+            console.log(roomlist);
             //ルーム番号が既に存在したら再生成
-            for (var j = 0; j !== 0;) {
-
+            for (var j = 0; j > -10; j++) {
                 var n1 = array[Math.floor(Math.random() * array.length)];
                 var n2 = array[Math.floor(Math.random() * array.length)];
                 var n3 = array[Math.floor(Math.random() * array.length)];
@@ -71,8 +71,10 @@
                 var n6 = array[Math.floor(Math.random() * array.length)];
                 var room = n1 + n2 + n3 + n4 + n5 + n6;
                 console.log(room)
+                console.log("a")
                 if (room in roomlist) {
-                    j = + 1
+                } else {
+                    break
                 }
             }
 
