@@ -51,7 +51,7 @@
 
             for (let i = 0; i < objects.length; i++) { // ルーム数絞って出てきた人の名前の数繰り返したい　多分object.lentghじゃない
                 if (objects[i]['userid'] !== userid) {
-                    html = html + `<tr><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}<br>回答：${objects[i]['guesstheme']}</td><td><input type="button" value="投票" id="${objects[i]['id']}" onclick="buttonPressed(this)" class="button"></td></tr>`
+                    html = html + `<tr><td>${objects[i]['lname'] + ' ' + objects[i]['fname']}<br>回答：${objects[i]['guesstheme']}</td><td class="none1"><input type="button" value="投票" id="${objects[i]['id']}" onclick="buttonPressed(this)" class="button"></td></tr>`
                 }
             }
             document.getElementById('table').innerHTML = html;
