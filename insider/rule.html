@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="index.css">
+
+    <script>
+        osql.requireLogin();
+
+        function button1Pressed() {
+            execInsert();
+        }
+
+        async function execInsert() {
+            var userid = document.getElementById('ID').value;
+            var nickname = document.getElementById('nickname').value;
+            var password = document.getElementById('password').value;
+            var passwordcheck = document.getElementById('passwordcheck').value;
+
+            if (password = !passwordcheck) {
+                wondow.alert("パスワードは2つとも同じものを入力してください")
+                return;
+            }
+
+
+            var sql = `insert into Users (id, nickname, password) values("${userid}", "${password}", "${nickname}");`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            document.getElementById('result').innerHTML = 'OK';
+        }
+    </script>
+
+</head>
+
+<body>
+    <p class="title">インサイダーゲーム</p>
+
+
+
+    <h2>ゲームルール</h2>
+    <p>
+        各ルームの役割は、<br>
+        GM（ゲームマスター）1人とインサイダー1人、その他は庶民です。<br>
+        お題はGMとインサイダーにのみ公開されます。<br>
+        話し合いの時間が始まったらGMにインサイダーと庶民は1人ずつ順番に質問をします。<br>
+
+        話し合いの中での目的<br>
+        GM：インサイダーを見つけること<br>
+        インサイダー：庶民とGMにインサイダーだとばれないようにすること<br>
+        庶民：お題を当てることとインサイダーを見つけること　<br>
+
+        話し合いの時間が終わったらお題解答とインサイダー投票の時間に入ります。<br>
+        結果に応じて各プレイヤーに点数が付与されます。</p>
+    <h2>注意事項</h2>
+    <p>ブラウザ上の「戻る」ボタンを使わないでください。<br>
+        役職とお題が自分の画面に表示されます。<br>
+        他の人に自分の画面を見せないようにしてください。<br>
+
+
+        <a href="enterroom.html">戻る</a>
+</body>
+
+</html>
