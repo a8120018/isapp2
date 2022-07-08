@@ -40,41 +40,41 @@
         document.getElementById("timer2").innerHTML = `1 : 10`;
         display();
         let countupVal, updateVal;
-        let count = 70;
-        
+        let count = 15;
+
 
 
 
         let countup = async function () {
-                count = count - 1;
-                var second = count % 60
-                var minute = Math.floor(count / 60)
-                var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
-                var objects = await osql.connect(sql);
+            count = count - 1;
+            var second = count % 60
+            var minute = Math.floor(count / 60)
+            var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
+            var objects = await osql.connect(sql);
 
-                var role = objects[0]['role'];
-                if (second < 10) {
-                    document.getElementById("timer2").innerHTML = `${minute} : 0${second}`;
-                }
-                else {
-                    document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
-                }
+            var role = objects[0]['role'];
+            if (second < 10) {
+                document.getElementById("timer2").innerHTML = `${minute} : 0${second}`;
+            }
+            else {
+                document.getElementById("timer2").innerHTML = `${minute} : ${second}`;
+            }
 
-                if (count == 0) {
+            if (count == 0) {
 
-                    if (role == "ゲームマスター") {
-                        location.href = 'testevaluation.html';
-                    } else {
-                        //画面遷移
-                        location.href = 'testtheme.html';
-                    }
+                if (role == "ゲームマスター") {
+                    location.href = 'evaluation.html';
+                } else {
+                    //画面遷移
+                    location.href = 'theme.html';
                 }
             }
-            countupVal = setInterval(countup, 1000);
-        
+        }
+        countupVal = setInterval(countup, 1000);
 
 
-            
+
+
         async function display() {
             var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
             var objects = await osql.connect(sql);
