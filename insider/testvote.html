@@ -73,6 +73,17 @@
                 console.log("投票済み")
                 document.getElementById("check").innerHTML = "投票済みです。全員の投票が終わるまでお待ちください。"
 
+
+
+
+
+
+
+
+
+
+
+
             }
 
 
@@ -96,6 +107,48 @@
 
 
             if (getobjects.length >= peoplenum) { // 全員投票したら一斉にresultに遷移
+
+
+
+                var sqlinsider = `select * from Points where roomid ="${room}" and role = "インサイダー" ` // ルーム内のインサイダー取得
+                var objectsinsider = await osql.connect(sqlinsider);
+                var insider = objectsinsider[0]['userid']
+                console.log(insider)
+
+                var numinsidersql = `select * from Points where roomid ="${room}" and selectinsider = "${insider}" `
+                var numinsiderobjects = await osql.connect(numinsidersql);
+                var numinsider = numinsiderobjects.length
+                console.log(numinsider)
+
+                var sqlrole = `select * from Points where userid = "${userid}" and roomid ="${room}"` // 自分の役割取得
+                var objectsrole = await osql.connect(sqlrole);
+                var myrole = objectsrole[0]['role']
+
+                if (myrole == "庶民") {
+                    if (user == insider) {
+                        var sqlsho = `update Points set point2 = "100" where roomid ="${room}" and userid="${userid}";`;
+                        var objectsinsider = await osql.connect(sqlsho);
+                    }
+
+
+                }
+
+                if (myrole == "ゲームマスター") {
+                    if (user == insider) {
+                        var sqlsho = `update Points set point2 = "200" where roomid ="${room}" and userid="${userid}";`;
+                        var objectsinsider = await osql.connect(sqlsho);
+                    }
+
+
+                }
+
+                if (myrole == "インサイダー") {
+
+                }
+
+
+
+
                 location.href = 'testresult.html'
 
             }
