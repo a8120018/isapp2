@@ -64,13 +64,7 @@
             var objects = await osql.connect(sql);
             console.log(objects)
 
-            if (window.confirm(`${objects[0]['lname'] + ' ' + objects[0]['fname']}さんに投票でよろしいですか？`)) {
-                // OKが選択された時の処理
-                var sql = `update Points set selectinsider = "${user}" where roomid ="${room}" and userid="${userid}";`;
-                var objects = await osql.connect(sql);
-                console.log(objects)
-                location.href = 'result.html'
-            }
+            
 
 
 
