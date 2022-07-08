@@ -78,7 +78,7 @@
                     if (answer == "null") {
                         ;
                     } else {
-                        html = html + `<tr><td>${answer}</td><td><input type="radio" id="a${i}" value="100" name="${objects2[i]['userid']}"><label for="a${i}">○</label><input type="radio" value="0" id="b${i}" name="${objects2[i]['userid']}"><label for="b${i}">×</label></td></tr>`
+                        html = html + `<tr><td>${answer}</td><td class="none"><input type="radio" id="a${i}" value="100" name="${objects2[i]['userid']}"><label for="a${i}">○</label><input type="radio" value="0" id="b${i}" name="${objects2[i]['userid']}" checked ><label for="b${i}">×</label></td></tr>`
 
                     }
 
@@ -96,7 +96,7 @@
 
             var sql1 = `select roomnum from Rooms where id="${room}";`;
             var objects1 = await osql.connect(sql1);
-            //全部入力されていたら実行うするif文入れる
+
             var sql2 = `update Rooms set go = "OK" where id="${room}";`;
             var objects2 = await osql.connect(sql2);
             //ここ分かりません　それぞれのラジオボタンに対応する点をデータベースに入れる　Points
@@ -107,22 +107,30 @@
             var sql2 = `select * from Points where roomid="${room}";`;
             var objects2 = await osql.connect(sql2);
             console.log(objects2)
-            for (var j = 0; j < objects1[0]['roomnum'] - 1; j++) {
+            console.log(objects1[0]['roomnum'] - 1)
+            for (var j = 0; j < objects1[0]['roomnum']; j++) {
                 if (objects2[j]['role'] !== "ゲームマスター") {
-                    var element = document.getElementsByClassName(`${objects2[j]['userid']}`);
-                    console.log(element)
+                    var element = document.getElementsByName(`${objects2[j]['userid']}`);
+                    console.log(element[j])
+
                     var radio = "";
                     for (var i = 0; i < element.length; i++) {
+                        console.log("a")
                         if (element[i].checked) {
                             radio = element[i].value; // radioは100か0が入ってる
                             console.log(radio)
+                            if (objects2[j]['role'] == "インサイダー" && radio == 100) {
+                                var sql3 = `update Points set point1 = 50 where userid="${objects2[j]['userid']}" and roomid="${room}";`;
+                            } else {
+                                var sql3 = `update Points set point1 = ${radio} where userid="${objects2[j]['userid']}" and roomid="${room}";`;
+                            }
+                            var objects3 = await osql.connect(sql3);
                         }
                     }
-                    var sql2 = `update Points set point2 = ${radio} where userid="${objects2[j]['userid']}" and roomid="${room}";`;
-                    var objects2 = await osql.connect(sql2);
+
                 }
                 //}
-                //location.href = "testvote.html";
+                location.href = "testvote.html";
             }
         }
 
