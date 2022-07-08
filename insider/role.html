@@ -54,6 +54,7 @@
         async function display() {
             var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
             var objects = await osql.connect(sql);
+            console.log(objects)
 
             var role = objects[0]['role'];
             console.log(objects[0]['role']);
