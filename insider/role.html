@@ -43,7 +43,7 @@
             document.getElementById("timer").innerHTML = count;
             if (count == 0) {
                 //画面遷移
-                location.href = 'discussion.html';
+                location.href = 'testdiscussion.html';
             }
         }
         countupVal = setInterval(countup, 1000);
@@ -54,6 +54,7 @@
         async function display() {
             var sql = `select role from Points where roomid="${room}" and userid="${userid}";`;
             var objects = await osql.connect(sql);
+            console.log(objects)
 
             var role = objects[0]['role'];
             console.log(objects[0]['role']);
