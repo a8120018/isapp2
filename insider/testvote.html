@@ -61,6 +61,7 @@
 
         async function buttonPressed(obj) {
             var user = obj.id; // a8120125@gsuite.si..... 選択したインサイダーのID
+            sessionStorage.setItem('user', user);
             var sql = `select * from TestUsers inner join Points on TestUsers.id = Points.userid and Points.roomid ="${room}" and Points.userid="${user}";`;
             var objects = await osql.connect(sql);
             console.log(objects)
@@ -95,6 +96,8 @@
         let updateval;
 
         let update = async function () {
+            var user = sessionStorage.getItem('user')
+
             var numsql = `select roomnum from Rooms where id="${room}";`;
             var numobjects = await osql.connect(numsql);
             console.log(numobjects)
@@ -126,7 +129,7 @@
 
                 if (myrole == "庶民") {
                     if (user == insider) {
-                        var sqlsho = `update Points set point2 = "100" where roomid ="${room}" and userid="${userid}";`;
+                        var sqlsho = `update Points set point2 = 100 where roomid ="${room}" and userid="${userid}";`;
                         var objectsinsider = await osql.connect(sqlsho);
                     }
 
@@ -135,7 +138,7 @@
 
                 if (myrole == "ゲームマスター") {
                     if (user == insider) {
-                        var sqlsho = `update Points set point2 = "200" where roomid ="${room}" and userid="${userid}";`;
+                        var sqlsho = `update Points set point2 = 200 where roomid ="${room}" and userid="${userid}";`;
                         var objectsinsider = await osql.connect(sqlsho);
                     }
 
