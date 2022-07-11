@@ -11,7 +11,7 @@
     /*タイトル*/
     .title {
         text-align: center;
-        font-size: 40px;
+        font-size: 70px;
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     }
 
@@ -22,8 +22,8 @@
 
     /*ユーザトップのボタン*/
     .button {
-        width: 100px;
-        height: 50px;
+        width: 200px;
+        height: 70px;
         border-radius: 10px;
         border: 2px solid #808080;
         color: white;
@@ -39,13 +39,13 @@
     /*中央揃え*/
     .center {
         text-align: center;
-        font-size: 15px;
+        font-size: 60px;
     }
 
     /*中央揃えフォントサイズ違い*/
     .center1 {
         text-align: center;
-        font-size: 15px;
+        font-size: 60px;
     }
 
     /*enterroomのレイアウト*/
@@ -60,7 +60,7 @@
         width: 200px;
         height: 4em;
         list-style: none;
-        font-size: 20px;
+        font-size: 60px;
     }
 
     #href {
@@ -71,16 +71,16 @@
     /*テキストボックスの丸角*/
     .textbox,
     #guess {
-        width: 130px;
-        height: 30px;
+        width: 200px;
+        height: 70px;
         border-radius: 10px;
-        font-size: 15px;
+        font-size: 60px;
     }
 
     #submit,
     input[type="button"] {
         width: 50px;
-        height: 35px;
+        height: 70px;
         border-radius: 8px;
     }
 
@@ -90,7 +90,7 @@
 
     /*↓下3つはmemberのレイアウト*/
     .member {
-        font-size: 20px;
+        font-size: 60px;
         margin: 0 0 15px 20%;
     }
 
@@ -101,7 +101,7 @@
 
     td {
         background-color: royalblue;
-        font-size: 20px;
+        font-size: 60px;
         padding: 6px 20px 6px 20px;
         color: white;
         border-radius: 2px;
@@ -109,9 +109,9 @@
 
     #start {
         width: 130px;
-        height: 50px;
+        height: 70px;
         border-radius: 10px;
-        font-size: 20px;
+        font-size: 60px;
         margin-top: 20px;
         border: none;
         color: white;
@@ -129,7 +129,7 @@
     /*roleのレイアウト*/
     .center2 {
         text-align: center;
-        font-size: 20px;
+        font-size: 60px;
         text-decoration: underline;
     }
 
@@ -172,7 +172,7 @@
         border-right: 1px solid #d7d7d7;
         background: #e5e5e5;
         color: #555e64;
-        font-size: 20px;
+        font-size: 60px;
         text-align: center;
         line-height: 1;
         transition: .2s;
@@ -190,7 +190,7 @@
     }
 
     #back {
-        font-size: 20px;
+        font-size: 60px;
         margin-left: 300px;
     }
 }
