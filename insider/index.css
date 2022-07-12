@@ -64,9 +64,9 @@
         font-size: 60px;
     }
 
-    #href {
-        float: left;
-        margin: 90px 0 0px 170px;
+    .flex {
+        /* margin: 90px 0 0px 170px;*/
+        display: inline-flex;
     }
 
     /*テキストボックスの丸角*/
@@ -333,6 +333,12 @@
     #theme3 {
         color: royalblue;
     }
+
+    #href {
+        float: left;
+        margin: 90px 0 0 300px;
+    }
+
 
     #timer2 {
         text-align: center;
