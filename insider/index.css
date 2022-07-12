@@ -14,6 +14,23 @@
         color: rgb(255, 255, 255);
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     }
+
+    /*enterroomのレイアウト*/
+    .layout {
+        text-align: center;
+        display: inline-flex;
+        margin: 0 auto;
+    }
+
+
+    #inline {
+        margin-left: 20px;
+    }
+
+    .flex {
+        text-align: center;
+        margin: 0 auto;
+    }
 }
 
 @media screen and (min-width: 721px) {
@@ -30,6 +47,27 @@
         font-size: 60px;
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     }
+
+    /*enterroomのレイアウト*/
+    .layout {
+        text-align: center;
+        display: inline-flex;
+        margin: 0 auto;
+    }
+
+    .flex {
+        margin: 0 auto;
+        text-align: center;
+    }
+}
+
+#in {
+    width: 30px;
+}
+
+#inline {
+    margin-left: 20px;
+
 }
 
 /*背景色*/
@@ -74,12 +112,8 @@ body {
     font-size: 15px;
 }
 
-/*enterroomのレイアウト*/
-ul.layout {
-    text-align: center;
-}
 
-ul.layout li {
+/*.layout {
     margin: 0 10px 10px 0;
     padding: 10px;
     float: left;
@@ -87,7 +121,7 @@ ul.layout li {
     height: 4em;
     list-style: none;
     font-size: 20px;
-}
+}*/
 
 /*テキストボックスの丸角*/
 .textbox,
@@ -161,8 +195,7 @@ td {
 }
 
 #href {
-    float: left;
-    margin: 90px 0 0 300px;
+    margin: -40px 0 0 0;
 }
 
 
