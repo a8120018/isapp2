@@ -83,7 +83,7 @@
             var objects = await osql.connect(sql);
             console.log(objects);
             //役割情報にメンバーと部屋名を入れる
-            var sql = `insert into Points (userid, roomid, role, guesstheme, point1, selectinsider, point2) values("${userid}", "${room}", "null", "null", "0", "null", "0");`;
+            var sql = `insert into Points (userid, roomid, role, guesstheme, point1, selectinsider, point2) values("${userid}", "${room}", "null", "null", "0", "null", "-1");`;
             var objects = await osql.connect(sql);
             console.log(objects);
             //セッションストレージに入れる
@@ -109,7 +109,7 @@
                 //役割情報にメンバーと部屋名を入れる
                 console.log(roomNum);
                 // console.log(userid);
-                var sql = `insert into Points (userid, roomid, role, guesstheme, point1, selectinsider, point2) values("${userid}", "${roomNum}", "null", "null", "0", "null", "0");`;
+                var sql = `insert into Points (userid, roomid, role, guesstheme, point1, selectinsider, point2) values("${userid}", "${roomNum}", "null", "null", "0", "null", "-1");`;
                 var objects = await osql.connect(sql);
                 console.log(objects);
                 //データベース更新
