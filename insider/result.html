@@ -43,7 +43,7 @@
 
             document.getElementById('insider').innerHTML = objects[0]['lname'] + ' ' + objects[0]['fname'];
             //順位表
-            var sql = `select id, lname, fname, point1 + point2 as sum from Users inner join Points on Users.id = Points.userid and roomid="${room}" order by point1+point2 desc;`; //インサイダーの人のuserid取得
+            var sql = `select id, lname, fname, point1 + point2 as sum from Users inner join Points on Users.id = Points.userid and roomid="${room}" order by point1+point2 desc;`; //ポイント順に並べたもの取得
             var objects = await osql.connect(sql);
 
             var html = '<table id="ranking">'
